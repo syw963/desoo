@@ -73,7 +73,7 @@
     <span class="page-num">4 / 18</span>
   </div>
   <div class="title-zone">
-    <h1 class="slide-title">\(y=a^x\)와 \(x=a^y\)의 교점 — 인터랙티브</h1>
+    <h1 class="slide-title">\(y=a^x\)와 \(x=a^y\)의 교점</h1>
   </div>
   <div class="content-zone top-210" style="gap:10px;">
     <div class="graph-wrap" style="gap:8px;">
@@ -113,14 +113,14 @@
   <div class="content-zone top-260">
     <div class="cols">
       <div class="col">
-        <div class="section-label">대각선 위 고정점</div>
+        <div class="section-label">\(y=x\) 위 고정점</div>
         <div class="box box-blue" style="margin-bottom:28px;">
           <div class="box-body">
             \(y = f(x)\) 와 \(y = f^{-1}(x)\) 의 교점 \((x_0,y_0)\) 에서<br>
             \(y_0 = x_0\) 이면 \(\;f(x_0) = x_0\)
           </div>
         </div>
-        <div class="section-label" style="margin-top:20px;">대각선 밖 2주기점</div>
+        <div class="section-label" style="margin-top:20px;">\(y=x\) 밖 2주기점</div>
         <div class="box box-red">
           <div class="box-body">
             \(y_0 \neq x_0\) 이면 \((y_0, x_0)\) 도 교점<br>
@@ -139,8 +139,8 @@
         <div class="box box-gray" style="margin-top:20px;">
           <div class="box-title" style="color:#3a3a3c;">분류 원칙</div>
           <div class="box-body txt-sm">
-            증가형 \(f\) → 대각선 밖 교점 <strong>불가</strong><br>
-            감소형 \(f\) → 대각선 밖 교점 <strong>가능</strong>
+            증가형 \(f\) → \(y=x\) 밖 교점 <strong>불가</strong><br>
+            감소형 \(f\) → \(y=x\) 밖 교점 <strong>가능</strong>
           </div>
         </div>
       </div>
@@ -162,7 +162,7 @@
   <div class="content-zone top-210" style="gap:20px;">
     <div class="cols" style="align-items:stretch; gap:50px;">
       <div class="col-6">
-        <div class="section-label">대각선 위 해의 조건</div>
+        <div class="section-label">\(y=x\) 위 해의 조건</div>
         <div style="font-size:34px; line-height:1.85;">
           \(a^x = x \;\Leftrightarrow\; \ln a = \dfrac{\ln x}{x}\)<br>
           \(h(x) = \dfrac{\ln x}{x},\quad h'(x) = \dfrac{1-\ln x}{x^2}\)<br>
@@ -233,7 +233,7 @@
           \(\lambda := -\ln a &gt; 0,\quad H_\lambda(u) := \lambda e^{-\lambda e^{-u}} - u\)<br>
           \(H'_\lambda(u) = \lambda^2 e^{-u - \lambda e^{-u}} - 1 \;\leq\; \dfrac{\lambda}{e} - 1\)<br><br>
           \(\lambda &gt; e\) 이면 \(H_\lambda\) 가 극값을 가짐 → 근 3개<br>
-          \(\lambda \leq e\) 이면 \(H_\lambda\) 단조감소 → 근 1개
+          \(\lambda \leq e\) 이면 \(H_\lambda\) 감소 → 근 1개
         </div>
         <div class="box box-blue" style="margin-top:14px;">
           <div class="box-body" style="font-size:31px;">
@@ -294,8 +294,8 @@
         <div class="display-math-sm">\[ W(xe^x) = x \]</div>
         <div class="section-label" style="margin-top:18px;">실수 가지</div>
         <ul class="bullet-list sm" style="margin-top:8px;">
-          <li>\(W_0\) (주가지): \(x \in [-e^{-1}, \infty)\), \(W_0 \geq -1\)</li>
-          <li>\(W_{-1}\) (하위가지): \(x \in [-e^{-1}, 0)\), \(W_{-1} \leq -1\)</li>
+          <li>\(W_0\): \(x \in [-e^{-1}, \infty)\), \(W_0 \geq -1\)</li>
+          <li>\(W_{-1}\): \(x \in [-e^{-1}, 0)\), \(W_{-1} \leq -1\)</li>
           <li>\(x \in (-e^{-1}, 0)\) 에서 두 실수 가지</li>
           <li>\(W_0(-1/e) = W_{-1}(-1/e) = -1\)</li>
         </ul>
@@ -312,8 +312,8 @@
         <div class="graph-wrap" style="gap:8px;">
           <canvas id="canvas-lambertw" width="720" height="490"></canvas>
           <div class="legend">
-            <div class="legend-item"><div class="legend-line" style="background:#0066cc;"></div><span class="txt-sm">\(W_0\) (주가지)</span></div>
-            <div class="legend-item"><div class="legend-line" style="background:#c0392b;"></div><span class="txt-sm">\(W_{-1}\) (하위가지)</span></div>
+            <div class="legend-item"><div class="legend-line" style="background:#0066cc;"></div><span class="txt-sm">\(W_0\)</span></div>
+            <div class="legend-item"><div class="legend-line" style="background:#c0392b;"></div><span class="txt-sm">\(W_{-1}\)</span></div>
           </div>
         </div>
       </div>
@@ -335,7 +335,7 @@
   <div class="content-zone top-210" style="gap:26px;">
     <div class="box box-blue" style="padding:20px 36px;">
       <div class="box-body txt-md txt-center">
-        대각선 위 해: \(\quad x_* = -\dfrac{W(-\ln a)}{\ln a}\) \(\quad\) (\(\eta = -\ln a\))
+        \(y=x\) 위 해: \(\quad x_* = -\dfrac{W(-\ln a)}{\ln a}\) \(\quad\) (\(\eta = -\ln a\))
       </div>
     </div>
     <table class="class-table">
@@ -421,7 +421,7 @@
           <div class="box-body txt-sm">
             교점 \((1,2)\), \((2,1)\) — 정수쌍!<br>
             \(\;4 \cdot 0.5^1 = 2, \quad 4 \cdot 0.5^2 = 1\)<br>
-            대각선 위 고정점: \(x_* \approx 1.457\)
+            \(y=x\) 위 고정점: \(x_* \approx 1.457\)
           </div>
         </div>
       </div>
@@ -430,8 +430,8 @@
         <div style="font-size:34px; line-height:2.0;">
           \(y = ka^x + b\) 와 \(x = ka^y + b\) 동시 만족<br>
           \(\Leftrightarrow\; f(f(x)) = x\)<br><br>
-          대각선 위: \(\; f(x) = x\)<br>
-          대각선 밖: \(\; f(x) \neq x,\; f(f(x)) = x\)
+          \(y=x\) 위: \(\; f(x) = x\)<br>
+          \(y=x\) 밖: \(\; f(x) \neq x,\; f(f(x)) = x\)
         </div>
         <div class="box box-gray" style="margin-top:20px;">
           <div class="box-body txt-sm">
@@ -470,7 +470,7 @@
         <div class="section-label">제어변수 정의</div>
         <div class="display-math">\[ \eta := -cK = -ka^b \ln a \]</div>
         <div style="font-size:33px; line-height:1.9; margin-top:8px;">
-          대각선 위 해 \((X = Y)\):<br>
+          \(y=x\) 위 해 \((X = Y)\):<br>
           \(Xe^{-cX} = K\;\Rightarrow\;(-cX)e^{-cX} = -cK = \eta\)<br>
           \(\Rightarrow\; -cX = W_j(\eta)\)
         </div>
@@ -508,7 +508,7 @@
         <div style="font-size:32px; line-height:1.9;">
           \(f\) 증가, \((x_0, y_0)\) 가 교점이고 \(x_0 &lt; y_0\) 이면:<br>
           \(f(x_0) &lt; f(y_0) \;\Rightarrow\; y_0 &lt; x_0\) — 모순<br><br>
-          ∴ 증가형에서 대각선 밖 교점 <strong>불가능</strong><br>
+          ∴ 증가형에서 \(y=x\) 밖 교점 <strong>불가능</strong><br>
           모든 교점은 \(y=x\) 위에만 존재
         </div>
         <div class="box box-blue" style="margin-top:20px;">
@@ -582,7 +582,7 @@
         <div class="box box-red" style="margin-top:16px;">
           <div class="box-body txt-sm">
             \(\eta &gt; e\) 이면 고정점이 불안정해짐<br>
-            → 대각선 밖 2주기점 2개 추가
+            → \(y=x\) 밖 2주기점 2개 추가
           </div>
         </div>
       </div>
@@ -811,7 +811,7 @@
         <tr>
           <td>교점 개수 (원래 문제)</td>
           <td>\(e^{-e}\) 와 \(e^{1/e}\)</td>
-          <td>대각선 위 해 \(x_* = -W(-\ln a)/\ln a\)</td>
+          <td>\(y=x\) 위 해 \(x_* = -W(-\ln a)/\ln a\)</td>
         </tr>
         <tr>
           <td>교점 개수 (일반화)</td>

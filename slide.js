@@ -562,7 +562,7 @@ function drawHLambdaGraph() {
 //  SLIDE 8 — Lambert W graph
 // ════════════════════════════════════════════════════════
 function drawLambertWGraph() {
-  const g = new Graph('canvas-lambertw', { xMin: -0.45, xMax: 4, yMin: -3.8, yMax: 2.6 });
+  const g = new Graph('canvas-lambertw', { xMin: -0.95, xMax: 2.5, yMin: -3.8, yMax: 2.6 });
   if (!g.canvas) return;
   g.clear();
   g.drawGrid(1, 1);
@@ -590,7 +590,7 @@ function drawLambertWGraph() {
   // Labels
   ctx.fillStyle = '#555'; ctx.font = '17px "IBM Plex Sans",sans-serif'; ctx.textAlign = 'center';
   ctx.fillText('-1/e', g.wx(-1 / Math.E), g.wy(0) + 22);
-  [1, 2, 3].forEach(v => ctx.fillText(v, g.wx(v), g.wy(0) + 22));
+  [1, 2].forEach(v => ctx.fillText(v, g.wx(v), g.wy(0) + 22));
   ctx.textAlign = 'right';
   [-1, -2, -3, 1, 2].forEach(v => ctx.fillText(v, g.wx(0) - 7, g.wy(v) + 6));
 
