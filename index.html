@@ -335,57 +335,65 @@
   <div class="content-zone top-210" style="gap:26px;">
     <div class="box box-blue" style="padding:20px 36px;">
       <div class="box-body txt-md txt-center">
-        \(y=x\) 위 해: \(\quad x_* = -\dfrac{W(-\ln a)}{\ln a}\) \(\quad\) (\(\eta = -\ln a\))
+        \(y=x\) 위 해: \(\quad x_* = \dfrac{W(\eta)}{\eta}\) \(\quad\) (\(\eta = -\ln a\))
       </div>
     </div>
-    <table class="class-table">
-      <thead>
-        <tr>
-          <th>\(a\) 의 범위</th>
-          <th>\(\eta = -\ln a\)</th>
-          <th>교점 수</th>
-          <th>구조</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>\(0 &lt; a &lt; e^{-e}\)</td>
-          <td>\(\eta &gt; e\)</td>
-          <td class="cnt-red">3</td>
-          <td>\(y=x\) 위 1 + 대칭쌍 2</td>
-        </tr>
-        <tr>
-          <td>\(e^{-e} \leq a &lt; 1\)</td>
-          <td>\(0 &lt; \eta \leq e\)</td>
-          <td class="cnt">1</td>
-          <td>\(y=x\) 위 1 (고정점)</td>
-        </tr>
-        <tr>
-          <td>\(a = 1\)</td>
-          <td>\(\eta = 0\)</td>
-          <td class="cnt">1</td>
-          <td>퇴화: \((1,1)\)</td>
-        </tr>
-        <tr>
-          <td class="highlight">\(1 &lt; a &lt; e^{1/e}\)</td>
-          <td class="highlight">\(-1/e &lt; \eta &lt; 0\)</td>
-          <td class="cnt">2</td>
-          <td>\(y=x\) 위 2개 (\(W_0, W_{-1}\))</td>
-        </tr>
-        <tr>
-          <td>\(a = e^{1/e}\)</td>
-          <td>\(\eta = -1/e\)</td>
-          <td class="cnt">1</td>
-          <td>\(y=x\) 위 접점</td>
-        </tr>
-        <tr>
-          <td>\(a &gt; e^{1/e}\)</td>
-          <td>\(\eta &lt; -1/e\)</td>
-          <td class="cnt">0</td>
-          <td>실수 교점 없음</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="slide9-layout">
+      <table class="class-table slide9-table">
+        <thead>
+          <tr>
+            <th>\(a\) 의 범위</th>
+            <th>\(\eta = -\ln a\)</th>
+            <th>교점 수</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>\(0 &lt; a &lt; e^{-e}\)</td>
+            <td>\(\eta &gt; e\)</td>
+            <td class="cnt-red">3</td>
+          </tr>
+          <tr>
+            <td>\(e^{-e} \leq a &lt; 1\)</td>
+            <td>\(0 &lt; \eta \leq e\)</td>
+            <td class="cnt">1</td>
+          </tr>
+          <tr>
+            <td>\(a = 1\)</td>
+            <td>\(\eta = 0\)</td>
+            <td class="cnt">1</td>
+          </tr>
+          <tr>
+            <td class="highlight">\(1 &lt; a &lt; e^{1/e}\)</td>
+            <td class="highlight">\(-1/e &lt; \eta &lt; 0\)</td>
+            <td class="cnt">2</td>
+          </tr>
+          <tr>
+            <td>\(a = e^{1/e}\)</td>
+            <td>\(\eta = -1/e\)</td>
+            <td class="cnt">1</td>
+          </tr>
+          <tr>
+            <td>\(a &gt; e^{1/e}\)</td>
+            <td>\(\eta &lt; -1/e\)</td>
+            <td class="cnt">0</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="slide9-graph-panel">
+        <canvas id="canvas-slide9" width="690" height="360"></canvas>
+        <div class="slide9-slider-row">
+          <span class="slider-label">\(a=\)</span>
+          <input type="range" id="a-slider-9" min="0.001" max="2.8" step="0.001" value="0.04">
+          <span class="slider-value" id="a-value-9">0.040</span>
+        </div>
+        <div class="slide9-special-row" aria-label="경계값 선택">
+          <button type="button" class="slide9-special-btn" data-special-a-9="lower">\(e^{-e}\)</button>
+          <button type="button" class="slide9-special-btn" data-special-a-9="upper">\(e^{1/e}\)</button>
+        </div>
+        <div class="slide9-count" id="intersect-info-9">교점 <strong>—</strong></div>
+      </div>
+    </div>
     <div class="box box-gray">
       <div class="box-body txt-sm">
         임계값 \(e^{-e} \approx 0.0660\), \(\;e^{1/e} \approx 1.4447\) — 두 경계는 \(|f'(x_*)| = 1\) 조건에서 유도

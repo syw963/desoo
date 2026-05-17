@@ -331,6 +331,85 @@ input[type="range"]::-webkit-slider-thumb {
   font-weight: 600;
 }
 
+/* ─── Slide 9 classification + mini graph ────────────── */
+.slide9-layout {
+  display: grid;
+  grid-template-columns: 1fr 720px;
+  gap: 30px;
+  align-items: stretch;
+}
+.slide9-table {
+  font-size: 26px;
+}
+.slide9-table th {
+  font-size: 24px;
+  padding: 13px 16px;
+}
+.slide9-table td {
+  padding: 13px 16px;
+}
+.slide9-graph-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+.slide9-graph-panel canvas {
+  width: 690px;
+  height: 360px;
+  border-radius: 12px;
+  box-shadow: rgba(0,0,0,0.12) 0 4px 24px;
+}
+.slide9-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.slide9-slider-row .slider-label {
+  min-width: 58px;
+  font-size: 28px;
+}
+.slide9-slider-row .slider-value {
+  min-width: 96px;
+  font-size: 28px;
+}
+.slide9-special-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: -2px;
+}
+.slide9-special-btn {
+  border: 1.5px solid rgba(0,102,204,0.35);
+  background: rgba(0,102,204,0.07);
+  color: var(--c-accent);
+  border-radius: 8px;
+  padding: 6px 18px;
+  font-family: var(--f-sans);
+  font-size: 22px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.slide9-special-btn:hover,
+.slide9-special-btn:focus-visible {
+  background: rgba(0,102,204,0.14);
+  border-color: var(--c-accent);
+}
+.slide9-special-btn.active {
+  background: var(--c-accent);
+  border-color: var(--c-accent);
+  color: #fff;
+}
+.slide9-count {
+  text-align: center;
+  font-size: 30px;
+  color: var(--c-muted);
+}
+.slide9-count strong {
+  color: var(--c-ink);
+  font-weight: 700;
+}
+
 /* ─── Tag / Badge ────────────────────────────────────── */
 .badge {
   display: inline-block;

@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     drawLambertWGraph();
     drawTowerGraph();
     initGraph4();
+    initGraph9();
   });
 });
 
@@ -261,6 +262,8 @@ function findZeros(f, xMin, xMax, steps = 3000) {
 
 const CANVAS_W4 = 1200, CANVAS_H4 = 500;
 const ASPECT4   = CANVAS_W4 / CANVAS_H4;   // 2.4
+const CANVAS_W9 = 690, CANVAS_H9 = 360;
+const ASPECT9   = CANVAS_W9 / CANVAS_H9;
 const SPECIAL_A_LOWER4 = Math.exp(-Math.E);
 const SPECIAL_A_UPPER4 = Math.exp(1 / Math.E);
 
@@ -318,6 +321,30 @@ function drawTicks4(g, step) {
   ctx.restore();
 }
 
+function drawPositiveCurveNearZero(g, f, color, lw = 3, steps = 1600) {
+  const { ctx } = g;
+  const lo = Math.max(1e-10, g.xMin > 0 ? g.xMin : 1e-10);
+  const hi = g.xMax;
+  if (hi <= lo) return;
+
+  ctx.beginPath();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lw;
+  let pen = false;
+  const logLo = Math.log(lo);
+  const logHi = Math.log(hi);
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const x = Math.exp(logLo + (logHi - logLo) * t);
+    const y = f(x);
+    const ok = isFinite(y) && y >= g.yMin - 0.8 && y <= g.yMax + 0.8;
+    if (!ok) { pen = false; continue; }
+    const cx = g.wx(x), cy = g.wy(y);
+    pen ? ctx.lineTo(cx, cy) : (ctx.moveTo(cx, cy), (pen = true));
+  }
+  ctx.stroke();
+}
+
 /** Fixed-point intersections for a > 1 using Lambert W. */
 function increasingIntersections4(a) {
   const lna = Math.log(a);
@@ -343,15 +370,34 @@ function increasingIntersections4(a) {
   return pts.sort((p, q) => p.x - q.x);
 }
 
+function intersectionPointsForA(a) {
+  const lna = Math.log(a);
+  const eps = 1e-8;
+  if (Math.abs(lna) <= eps) return [];
+
+  if (a > 1) return increasingIntersections4(a);
+
+  const lo = 5e-5;
+  const hi = 1.05; // for a<1, all intersections are in (0,1)
+  const f = x => x > lo ? Math.pow(a, x) - Math.log(x) / lna : NaN;
+  const zeros = findZeros(f, lo, hi, 12000);
+  const pts = zeros.map(x => ({ x, y: Math.pow(a, x) }));
+
+  if (Math.abs(a - SPECIAL_A_LOWER4) < 1e-10) {
+    return [{ x: 1 / Math.E, y: 1 / Math.E }];
+  }
+  return pts;
+}
+
 /** Compute auto-view for the graph so intersections are comfortably framed.
  *  Returns {xMin,xMax,yMin,yMax} with equal scale (xRange/yRange = ASPECT4). */
-function autoView4(a, intPts) {
+function autoView4(a, intPts, aspect = ASPECT4) {
   const hy0 = 2.5; // fallback half-size in y
 
   if (intPts.length === 0) {
     let cx = 2, cy = 2, hy = hy0;
     if (a < 1) { cx = 0.5; cy = 0.5; hy = 1.2; }
-    return { xMin: cx - hy*ASPECT4, xMax: cx + hy*ASPECT4, yMin: cy-hy, yMax: cy+hy };
+    return { xMin: cx - hy*aspect, xMax: cx + hy*aspect, yMin: cy-hy, yMax: cy+hy };
   }
 
   const xs  = intPts.map(p => p.x);
@@ -367,8 +413,8 @@ function autoView4(a, intPts) {
   const rHY = Math.max(dY / 2, 0.25) * 1.55;
 
   // Choose hy so both axes fit with equal scale: hx = hy * ASPECT4
-  const hy  = Math.max(rHY, rHX / ASPECT4, 0.4);
-  const hx  = hy * ASPECT4;
+  const hy  = Math.max(rHY, rHX / aspect, 0.4);
+  const hx  = hy * aspect;
 
   return { xMin: cx-hx, xMax: cx+hx, yMin: cy-hy, yMax: cy+hy };
 }
@@ -392,21 +438,7 @@ function drawGraph4(a) {
   const eps = 1e-8;
 
   /* ── 1. Find all intersections of y=aˣ and y=logₐ(x) ── */
-  let intPts = [];
-  if (Math.abs(lna) > eps) {
-    if (a > 1) {
-      intPts = increasingIntersections4(a);
-    } else {
-      const lo = 5e-5;
-      const hi = 1.05; // for a<1, all intersections are in (0,1)
-      const f = x => x > lo ? Math.pow(a, x) - Math.log(x) / lna : NaN;
-      const zeros = findZeros(f, lo, hi, 12000);
-      intPts = zeros.map(x => ({ x, y: Math.pow(a, x) }));
-      if (Math.abs(a - SPECIAL_A_LOWER4) < 1e-10) {
-        intPts = [{ x: 1 / Math.E, y: 1 / Math.E }];
-      }
-    }
-  }
+  const intPts = intersectionPointsForA(a);
 
   /* ── 2. Auto view with equal scale ── */
   const view = autoView4(a, intPts);
@@ -430,7 +462,7 @@ function drawGraph4(a) {
 
   // y = logₐ(x)  (red)
   if (Math.abs(lna) > eps) {
-    g.drawCurve(x => x > 5e-5 ? Math.log(x) / lna : NaN, '#c0392b', 3.5, 1000);
+    drawPositiveCurveNearZero(g, x => Math.log(x) / lna, '#c0392b', 3.5, 1800);
   }
 
   // Intersection dots + coordinate labels
@@ -478,6 +510,65 @@ function drawGraph4(a) {
   }
   if (infoElem) infoElem.innerHTML =
     `교점 개수: <strong>${intPts.length}개</strong>&emsp;<span style="color:#6e6e73;font-size:27px;">${note}</span>`;
+}
+
+function initGraph9() {
+  const slider = document.getElementById('a-slider-9');
+  if (!slider) return;
+  slider.addEventListener('input', () => drawGraph9(+slider.value));
+  document.querySelectorAll('.slide9-special-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const a = btn.getAttribute('data-special-a-9') === 'lower' ? SPECIAL_A_LOWER4 : SPECIAL_A_UPPER4;
+      slider.value = String(a);
+      drawGraph9(a);
+    });
+  });
+  drawGraph9(+slider.value);
+}
+
+function drawGraph9(a) {
+  const lna = Math.log(a);
+  const eps = 1e-8;
+  const intPts = intersectionPointsForA(a);
+  const view = autoView4(a, intPts, ASPECT9);
+  const g = new Graph('canvas-slide9', view);
+  if (!g.canvas) return;
+
+  g.clear('#fafafa');
+  const unitStep = niceStep(Math.min(view.xMax - view.xMin, view.yMax - view.yMin));
+  g.drawGrid(unitStep, unitStep);
+  g.drawAxes('#ccc');
+  g.drawDash(x => x, '#bbb', 1.8);
+  g.drawCurve(x => Math.pow(a, x), '#0066cc', 2.8, 900);
+  if (Math.abs(lna) > eps) {
+    drawPositiveCurveNearZero(g, x => Math.log(x) / lna, '#c0392b', 2.8, 1500);
+  }
+  intPts.forEach(p => g.dot(p.x, p.y, '#ff6b00', 8));
+  drawTicks4(g, unitStep);
+
+  const aElem = document.getElementById('a-value-9');
+  const infoElem = document.getElementById('intersect-info-9');
+  document.querySelectorAll('.slide9-special-btn').forEach(btn => {
+    const isLower = btn.getAttribute('data-special-a-9') === 'lower';
+    const isActive = Math.abs(a - (isLower ? SPECIAL_A_LOWER4 : SPECIAL_A_UPPER4)) < 1e-10;
+    btn.classList.toggle('active', isActive);
+  });
+  if (aElem) aElem.textContent =
+    Math.abs(a - SPECIAL_A_LOWER4) < 1e-10 ? SPECIAL_A_LOWER4.toFixed(4) :
+    Math.abs(a - SPECIAL_A_UPPER4) < 1e-10 ? SPECIAL_A_UPPER4.toFixed(4) :
+    a.toFixed(3);
+  if (infoElem) {
+    const region =
+      Math.abs(a - 1) < 1e-4 ? 'a = 1' :
+      Math.abs(a - SPECIAL_A_LOWER4) < 1e-10 ? 'a = e⁻ᵉ' :
+      a < SPECIAL_A_LOWER4 ? '0 < a < e⁻ᵉ' :
+      a < 1 ? 'e⁻ᵉ ≤ a < 1' :
+      Math.abs(a - SPECIAL_A_UPPER4) < 1e-10 ? 'a = e^(1/e)' :
+      a < SPECIAL_A_UPPER4 ? '1 < a < e^(1/e)' :
+      Math.abs(a - SPECIAL_A_UPPER4) < 0.001 ? 'a ≈ e^(1/e)' :
+      'a > e^(1/e)';
+    infoElem.innerHTML = `교점 <strong>${intPts.length}개</strong><span style="font-size:22px;"> &nbsp;${region}</span>`;
+  }
 }
 
 // ════════════════════════════════════════════════════════
