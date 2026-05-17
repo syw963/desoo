@@ -36,7 +36,7 @@
   <div class="content-zone top-210">
     <ol class="toc-list">
       <li class="toc-item"><span class="toc-num">01</span><span class="toc-text">탐구 동기 — \(y=a^x\)와 \(x=a^y\)의 교점</span></li>
-      <li class="toc-item"><span class="toc-num">02</span><span class="toc-text">기본 문제 해결 — 증가형·감소형 완전 분류</span></li>
+      <li class="toc-item"><span class="toc-num">02</span><span class="toc-text">기본 문제 해결 — 증가형·감소형 분류</span></li>
       <li class="toc-item"><span class="toc-num">03</span><span class="toc-text">Lambert \(W\) 함수 소개 및 적용</span></li>
       <li class="toc-item"><span class="toc-num">04</span><span class="toc-text">일반화된 \(f(x)=ka^x+b\) 의 교점 분류</span></li>
       <li class="toc-item"><span class="toc-num">05</span><span class="toc-text">무한 지수탑 소개</span></li>
@@ -175,7 +175,7 @@
         </div>
       </div>
       <div class="col-4">
-        <div class="section-label">그래프 \(h(x) = \ln x / x\)</div>
+        <div class="section-label">그래프 \(h(x) = \dfrac{\ln x}{x}\)</div>
         <div class="graph-wrap" style="gap:8px;">
           <canvas id="canvas-hx" width="600" height="320"></canvas>
         </div>
@@ -721,21 +721,21 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 16  경계의 연관성
 ══════════════════════════════════════════════════════ -->
-<div class="slide slide-dark" id="slide-16">
+<div class="slide" id="slide-16">
   <div class="slide-header">
     <span class="chapter-label">연관성</span>
     <span class="page-num">16 / 18</span>
   </div>
-  <div class="title-zone" style="border-bottom-color: var(--c-accent-dk);">
+  <div class="title-zone">
     <h1 class="slide-title">수렴 경계와 교점 경계의 일치</h1>
-    <p class="slide-subtitle" style="color:rgba(255,255,255,0.55);">같은 방정식, 세 가지 시점</p>
+    <p class="slide-subtitle">같은 방정식, 세 가지 시점</p>
   </div>
   <div class="content-zone top-260" style="gap:32px;">
     <div class="cols" style="gap:40px;">
       <div class="col">
-        <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:28px 30px;">
-          <div style="font-size:28px; font-weight:600; color:var(--c-accent-dk); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em;">상한 \(e^{1/e}\)</div>
-          <div style="font-size:30px; line-height:1.8; color:#fff;">
+        <div class="box box-blue" style="padding:28px 30px;">
+          <div class="box-title">상한 \(e^{1/e}\)</div>
+          <div class="box-body txt-sm">
             교점: \(1 &lt; a &lt; e^{1/e}\) → 2개<br>
             교점: \(a &gt; e^{1/e}\) → 0개<br>
             무한탑: \(a \leq e^{1/e}\) 이면 수렴
@@ -743,9 +743,9 @@
         </div>
       </div>
       <div class="col">
-        <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:28px 30px;">
-          <div style="font-size:28px; font-weight:600; color:var(--c-accent-dk); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em;">하한 \(e^{-e}\)</div>
-          <div style="font-size:30px; line-height:1.8; color:#fff;">
+        <div class="box box-blue" style="padding:28px 30px;">
+          <div class="box-title">하한 \(e^{-e}\)</div>
+          <div class="box-body txt-sm">
             교점: \(a &lt; e^{-e}\) → 3개<br>
             교점: \(e^{-e} \leq a &lt; 1\) → 1개<br>
             무한탑: \(a \geq e^{-e}\) 이면 수렴
@@ -753,18 +753,18 @@
         </div>
       </div>
     </div>
-    <div style="background:rgba(0,102,204,0.18); border:2px solid var(--c-accent-dk); border-radius:16px; padding:28px 40px; text-align:center;">
-      <div style="font-size:30px; color:rgba(255,255,255,0.7); margin-bottom:10px; font-weight:500;">공통 원인</div>
-      <div style="font-size:36px; color:#fff; font-weight:600; line-height:1.6;">
+    <div class="box box-gray" style="padding:28px 40px; text-align:center;">
+      <div class="box-title" style="color:#3a3a3c;">공통 원인</div>
+      <div class="box-body txt-md txt-bold">
         고정점 안정성 조건 \(\;|f'(x_*)| = |x_* \ln a| = |W(-\ln a)| = 1\)
       </div>
     </div>
     <div class="flow-row">
-      <div class="flow-node" style="font-size:28px; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.25); color:#fff;">교점 분류 경계<br><span style="font-size:22px; font-weight:400; color:rgba(255,255,255,0.6);">\(e^{-e},\; e^{1/e}\)</span></div>
-      <div class="flow-arrow" style="color:#fff;">⟺</div>
-      <div class="flow-node" style="font-size:28px; background:rgba(0,153,255,0.18); border:1px solid rgba(41,151,255,0.5); color:#fff;">Lambert \(W\) 가지<br><span style="font-size:22px; font-weight:400; color:rgba(255,255,255,0.6);">\(|W| = 1\) 지점</span></div>
-      <div class="flow-arrow" style="color:#fff;">⟺</div>
-      <div class="flow-node" style="font-size:28px; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.25); color:#fff;">무한탑 수렴<br><span style="font-size:22px; font-weight:400; color:rgba(255,255,255,0.6);">하·상한 경계</span></div>
+      <div class="flow-node" style="font-size:28px;">교점 분류 경계<br><span class="txt-muted" style="font-size:22px; font-weight:400;">\(e^{-e},\; e^{1/e}\)</span></div>
+      <div class="flow-arrow">⟺</div>
+      <div class="flow-node accent" style="font-size:28px;">Lambert \(W\) 가지<br><span style="font-size:22px; font-weight:400;">\(|W| = 1\) 지점</span></div>
+      <div class="flow-arrow">⟺</div>
+      <div class="flow-node" style="font-size:28px;">무한탑 수렴<br><span class="txt-muted" style="font-size:22px; font-weight:400;">하·상한 경계</span></div>
     </div>
   </div>
 </div>
@@ -839,7 +839,6 @@
 <div class="slide slide-outro" id="slide-18">
   <div class="outro-inner">
     <div class="outro-main">감사합니다</div>
-    <div class="outro-sub">질문 환영</div>
   </div>
   <div class="cover-line"></div>
 </div>
