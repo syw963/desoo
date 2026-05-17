@@ -75,9 +75,9 @@
   <div class="title-zone">
     <h1 class="slide-title">\(y=a^x\)와 \(x=a^y\)의 교점 — 인터랙티브</h1>
   </div>
-  <div class="content-zone top-210" style="gap:16px;">
-    <div class="graph-wrap">
-      <canvas id="canvas-slide4" width="1200" height="540"></canvas>
+  <div class="content-zone top-210" style="gap:10px;">
+    <div class="graph-wrap" style="gap:8px;">
+      <canvas id="canvas-slide4" width="1200" height="500"></canvas>
       <div class="legend">
         <div class="legend-item"><div class="legend-line" style="background:#0066cc;"></div><span class="txt-sm">\(y = a^x\)</span></div>
         <div class="legend-item"><div class="legend-line" style="background:#c0392b;"></div><span class="txt-sm">\(y = \log_a x\)</span></div>
@@ -87,8 +87,12 @@
     </div>
     <div class="slider-row">
       <span class="slider-label">\(a = \)</span>
-      <input type="range" id="a-slider" min="0.15" max="2.8" step="0.01" value="1.2">
-      <span class="slider-value" id="a-value">\(1.20\)</span>
+      <input type="range" id="a-slider" min="0.001" max="2.8" step="0.001" value="1.2">
+      <span class="slider-value" id="a-value">\(1.200\)</span>
+    </div>
+    <div class="special-point-row" aria-label="접점 특수값 선택">
+      <button type="button" class="special-point-btn" data-special-a="lower">접점 \((1/e, 1/e)\)</button>
+      <button type="button" class="special-point-btn" data-special-a="upper">접점 \((e, e)\)</button>
     </div>
     <div class="intersect-info" id="intersect-info">교점 개수: <strong id="intersect-count">—</strong></div>
   </div>

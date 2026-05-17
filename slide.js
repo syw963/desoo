@@ -256,66 +256,228 @@ function findZeros(f, xMin, xMax, steps = 3000) {
 
 // ════════════════════════════════════════════════════════
 //  SLIDE 4 — Interactive graph  y=aˣ  vs  y=logₐ(x)
+//  Equal-scale axes, auto-adjusting view
 // ════════════════════════════════════════════════════════
+
+const CANVAS_W4 = 1200, CANVAS_H4 = 500;
+const ASPECT4   = CANVAS_W4 / CANVAS_H4;   // 2.4
+const SPECIAL_A_LOWER4 = Math.exp(-Math.E);
+const SPECIAL_A_UPPER4 = Math.exp(1 / Math.E);
+
+/** Compute a nice grid step for a given axis range */
+function niceStep(range) {
+  if (range <= 0) return 1;
+  const raw  = range / 7;                         // aim ~7 gridlines
+  const exp  = Math.floor(Math.log10(raw));
+  const norm = raw / Math.pow(10, exp);
+  const step = norm <= 1.5 ? 1 : norm <= 3.5 ? 2 : norm <= 7.5 ? 5 : 10;
+  return step * Math.pow(10, exp);
+}
+
+/** Format a tick label: trim trailing zeros, avoid -0 */
+function fmtTick(v, step) {
+  if (Math.abs(v) < step * 1e-9) return '0';
+  const dec = Math.max(0, -Math.floor(Math.log10(step)) + 0);
+  return v.toFixed(dec);
+}
+
+/** Draw adaptive axis tick labels directly on a Graph canvas */
+function drawTicks4(g, step) {
+  const { ctx, W, H } = g;
+  ctx.save();
+  ctx.fillStyle = '#888';
+  ctx.font = '19px "IBM Plex Sans",sans-serif';
+
+  // Positions of axes on canvas
+  const axY = (g.yMin <= 0 && g.yMax >= 0) ? Math.min(g.wy(0) + 22, H - 8) : H - 8;
+  const axX = (g.xMin <= 0 && g.xMax >= 0) ? Math.max(g.wx(0) - 9, 42) : 42;
+
+  // X ticks
+  ctx.textAlign = 'center';
+  let x = Math.ceil(g.xMin / step) * step;
+  while (x <= g.xMax + step * 1e-9) {
+    const px = g.wx(x);
+    if (px > 22 && px < W - 10) {
+      ctx.fillText(fmtTick(x, step), px, axY);
+    }
+    x += step;
+    if (x > 1e9) break; // safety
+  }
+
+  // Y ticks
+  ctx.textAlign = 'right';
+  let y = Math.ceil(g.yMin / step) * step;
+  while (y <= g.yMax + step * 1e-9) {
+    const py = g.wy(y);
+    if (py > 10 && py < H - 5) {
+      ctx.fillText(fmtTick(y, step), axX, py + 7);
+    }
+    y += step;
+    if (y > 1e9) break;
+  }
+  ctx.restore();
+}
+
+/** Fixed-point intersections for a > 1 using Lambert W. */
+function increasingIntersections4(a) {
+  const lna = Math.log(a);
+  if (lna <= 0) return [];
+  const eta = -lna;
+  if (eta < -1 / Math.E - 1e-12 || eta >= 0) return [];
+
+  const pts = [];
+  const w0 = lambertW0(eta);
+  if (isFinite(w0)) {
+    const x = -w0 / lna;
+    pts.push({ x, y: x });
+  }
+
+  const wm1 = lambertWm1(eta);
+  if (isFinite(wm1)) {
+    const x = -wm1 / lna;
+    if (!pts.some(p => Math.abs(p.x - x) < 1e-6 * Math.max(1, Math.abs(x)))) {
+      pts.push({ x, y: x });
+    }
+  }
+
+  return pts.sort((p, q) => p.x - q.x);
+}
+
+/** Compute auto-view for the graph so intersections are comfortably framed.
+ *  Returns {xMin,xMax,yMin,yMax} with equal scale (xRange/yRange = ASPECT4). */
+function autoView4(a, intPts) {
+  const hy0 = 2.5; // fallback half-size in y
+
+  if (intPts.length === 0) {
+    let cx = 2, cy = 2, hy = hy0;
+    if (a < 1) { cx = 0.5; cy = 0.5; hy = 1.2; }
+    return { xMin: cx - hy*ASPECT4, xMax: cx + hy*ASPECT4, yMin: cy-hy, yMax: cy+hy };
+  }
+
+  const xs  = intPts.map(p => p.x);
+  const ys  = intPts.map(p => p.y);
+  const mnX = Math.min(...xs), mxX = Math.max(...xs);
+  const mnY = Math.min(...ys), mxY = Math.max(...ys);
+  const cx  = (mnX + mxX) / 2;
+  const cy  = (mnY + mxY) / 2;
+  const dX  = mxX - mnX, dY = mxY - mnY;
+
+  // Required half-sizes with 55% padding on each side of span
+  const rHX = Math.max(dX / 2, 0.25) * 1.55;
+  const rHY = Math.max(dY / 2, 0.25) * 1.55;
+
+  // Choose hy so both axes fit with equal scale: hx = hy * ASPECT4
+  const hy  = Math.max(rHY, rHX / ASPECT4, 0.4);
+  const hx  = hy * ASPECT4;
+
+  return { xMin: cx-hx, xMax: cx+hx, yMin: cy-hy, yMax: cy+hy };
+}
+
 function initGraph4() {
   const slider = document.getElementById('a-slider');
   if (!slider) return;
   slider.addEventListener('input', () => drawGraph4(+slider.value));
+  document.querySelectorAll('.special-point-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const a = btn.dataset.specialA === 'lower' ? SPECIAL_A_LOWER4 : SPECIAL_A_UPPER4;
+      slider.value = String(a);
+      drawGraph4(a);
+    });
+  });
   drawGraph4(+slider.value);
 }
 
 function drawGraph4(a) {
-  const g = new Graph('canvas-slide4', { xMin: -1.0, xMax: 5.0, yMin: -1.0, yMax: 5.0 });
-  if (!g.canvas) return;
-  g.clear();
-  g.drawGrid();
-  g.drawAxes();
-  g.ticksX([1,2,3,4,-1], v => v,  24, 20);
-  g.ticksY([1,2,3,4,-1], v => v, -8, 20);
-
   const lna = Math.log(a);
-  const eps = 1e-9;
+  const eps = 1e-8;
 
-  // y = x  (dashed)
-  g.drawDash(x => x, '#aaa', 2.5);
-
-  // y = aˣ  (blue)
-  g.drawCurve(x => Math.pow(a, x), '#0066cc', 3.5);
-
-  // y = logₐ(x)  (red, x > 0 only)
+  /* ── 1. Find all intersections of y=aˣ and y=logₐ(x) ── */
+  let intPts = [];
   if (Math.abs(lna) > eps) {
-    g.drawCurve(x => x > 0.002 ? Math.log(x) / lna : NaN, '#c0392b', 3.5);
+    if (a > 1) {
+      intPts = increasingIntersections4(a);
+    } else {
+      const lo = 5e-5;
+      const hi = 1.05; // for a<1, all intersections are in (0,1)
+      const f = x => x > lo ? Math.pow(a, x) - Math.log(x) / lna : NaN;
+      const zeros = findZeros(f, lo, hi, 12000);
+      intPts = zeros.map(x => ({ x, y: Math.pow(a, x) }));
+      if (Math.abs(a - SPECIAL_A_LOWER4) < 1e-10) {
+        intPts = [{ x: 1 / Math.E, y: 1 / Math.E }];
+      }
+    }
   }
 
-  // Intersections of y=aˣ and y=logₐ(x)
-  let pts = [];
+  /* ── 2. Auto view with equal scale ── */
+  const view = autoView4(a, intPts);
+  const g    = new Graph('canvas-slide4', view);
+  if (!g.canvas) return;
+
+  /* ── 3. Draw ── */
+  g.clear('#fafafa');
+
+  const xRange = view.xMax - view.xMin;
+  const yRange = view.yMax - view.yMin;
+  const unitStep = niceStep(Math.min(xRange, yRange));
+  g.drawGrid(unitStep, unitStep);
+  g.drawAxes('#ccc');
+
+  // y = x  (dashed gray)
+  g.drawDash(x => x, '#bbb', 2);
+
+  // y = aˣ  (blue, 1000 samples for smooth render)
+  g.drawCurve(x => Math.pow(a, x), '#0066cc', 3.5, 1000);
+
+  // y = logₐ(x)  (red)
   if (Math.abs(lna) > eps) {
-    const f = x => x <= 0.001 ? NaN : Math.pow(a, x) - Math.log(x) / lna;
-    pts = findZeros(f, 0.001, 4.9, 4000);
+    g.drawCurve(x => x > 5e-5 ? Math.log(x) / lna : NaN, '#c0392b', 3.5, 1000);
   }
-  pts.forEach(x => g.dot(x, Math.pow(a, x), '#0066cc', 9));
 
-  // Update info bar
-  const aElem = document.getElementById('a-value');
-  if (aElem) aElem.textContent = `a = ${a.toFixed(3)}`;
+  // Intersection dots + coordinate labels
+  intPts.forEach((p, i) => {
+    g.dot(p.x, p.y, '#ff6b00', 10);
+    // Small coordinate label
+    if (intPts.length <= 4) {
+      const xs = p.x, ys = p.y;
+      const lx = Math.abs(xs) < 10 ? xs.toFixed(3) : xs.toFixed(1);
+      const ly = Math.abs(ys) < 10 ? ys.toFixed(3) : ys.toFixed(1);
+      const dx = 14, dy = p.y > (view.yMin + view.yMax) / 2 ? -18 : 26;
+      g.text(p.x, p.y, `(${lx}, ${ly})`, '#cc4400', dx, dy, 19);
+    }
+  });
 
-  const cntElem   = document.getElementById('intersect-count');
-  const infoElem  = document.getElementById('intersect-info');
-  const E1E  = Math.exp(-Math.E);   // e^{-e}  ≈ 0.0660
-  const Einv = Math.exp(1 / Math.E); // e^{1/e} ≈ 1.4447
+  // Adaptive tick labels
+  drawTicks4(g, unitStep);
+
+  /* ── 4. Update UI ── */
+  const aElem   = document.getElementById('a-value');
+  const infoElem = document.getElementById('intersect-info');
+  document.querySelectorAll('.special-point-btn').forEach(btn => {
+    const isLower = btn.dataset.specialA === 'lower';
+    const isActive = Math.abs(a - (isLower ? SPECIAL_A_LOWER4 : SPECIAL_A_UPPER4)) < 1e-10;
+    btn.classList.toggle('active', isActive);
+  });
+  if (aElem) aElem.textContent =
+    Math.abs(a - SPECIAL_A_LOWER4) < 1e-10 ? SPECIAL_A_LOWER4.toFixed(4) :
+    Math.abs(a - SPECIAL_A_UPPER4) < 1e-10 ? SPECIAL_A_UPPER4.toFixed(4) :
+    a.toFixed(3);
+
   let note = '';
-  if (a < 1 - eps) {
-    if (a < E1E - 0.002)          note = `← a < e⁻ᵉ ≈ ${E1E.toFixed(4)}: 교점 3개`;
-    else if (a < E1E + 0.004)     note = `← a ≈ e⁻ᵉ (경계)`;
-    else                          note = `← e⁻ᵉ ≤ a < 1: 교점 1개`;
-  } else if (a > 1 + eps) {
-    if (a < Einv - 0.002)         note = `← 1 < a < e^{1/e} ≈ ${Einv.toFixed(4)}: 교점 2개`;
-    else if (a < Einv + 0.01)     note = `← a ≈ e^{1/e} (접점)`;
-    else                          note = `← a > e^{1/e}: 교점 없음`;
+  if (Math.abs(a - 1) < 1e-4) {
+    note = '— a = 1 (퇴화)';
+  } else if (a < 1) {
+    if      (Math.abs(a - SPECIAL_A_LOWER4) < 1e-10) note = `— a = e⁻ᵉ ≈ ${SPECIAL_A_LOWER4.toFixed(4)}: 접점 (1/e, 1/e)`;
+    else if (a < SPECIAL_A_LOWER4 - 0.001)  note = `— a < e⁻ᵉ ≈ ${SPECIAL_A_LOWER4.toFixed(4)}: 교점 3개`;
+    else if (a < SPECIAL_A_LOWER4 + 0.002)  note = `— a ≈ e⁻ᵉ (경계, 1→3)`;
+    else                        note = `— e⁻ᵉ ≤ a < 1: 교점 1개`;
+  } else {
+    if      (Math.abs(a - SPECIAL_A_UPPER4) < 1e-10) note = `— a = e^(1/e) ≈ ${SPECIAL_A_UPPER4.toFixed(4)}: 접점 (e, e)`;
+    else if (a < SPECIAL_A_UPPER4 - 0.003) note = `— 1 < a < e^(1/e) ≈ ${SPECIAL_A_UPPER4.toFixed(4)}: 교점 2개`;
+    else if (a < SPECIAL_A_UPPER4 + 0.01)  note = `— a ≈ e^(1/e) (접점)`;
+    else                        note = `— a > e^(1/e): 교점 없음`;
   }
-  if (cntElem)  cntElem.textContent = `${pts.length}개`;
-  if (infoElem) infoElem.innerHTML  =
-    `교점 개수: <strong>${pts.length}개</strong>&emsp;<span style="color:#6e6e73;font-size:28px;">${note}</span>`;
+  if (infoElem) infoElem.innerHTML =
+    `교점 개수: <strong>${intPts.length}개</strong>&emsp;<span style="color:#6e6e73;font-size:27px;">${note}</span>`;
 }
 
 // ════════════════════════════════════════════════════════
