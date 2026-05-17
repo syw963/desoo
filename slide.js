@@ -3,7 +3,7 @@
 // ════════════════════════════════════════════════════════
 //  STATE & NAVIGATION
 // ════════════════════════════════════════════════════════
-const TOTAL = 18;
+const TOTAL = 22;
 let current = 1;
 
 function showSlide(n) {
@@ -57,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Draw all graphs after math rendering
   requestAnimationFrame(() => {
     drawHxGraph();
-    drawHLambdaGraph();
     drawLambertWGraph();
     drawTowerGraph();
     initGraph4();
@@ -606,47 +605,6 @@ function drawHxGraph() {
 
   // x ticks
   g.ticksX([1, 2, 3, 4, 5, 6, 7], v => v === 3 ? 'e≈2.72' : v, 22, 16);
-}
-
-// ════════════════════════════════════════════════════════
-//  SLIDE 7 — H_λ(u) = λ·exp(−λ·exp(−u)) − u
-// ════════════════════════════════════════════════════════
-function drawHLambdaGraph() {
-  const g = new Graph('canvas-hlambda', { xMin: -0.5, xMax: 5, yMin: -2.2, yMax: 2.2 });
-  if (!g.canvas) return;
-  g.clear();
-  g.drawGrid(1, 1);
-  g.drawAxes();
-
-  const H = (lam, u) => lam * Math.exp(-lam * Math.exp(-u)) - u;
-
-  // Three lambda values
-  const curves = [
-    { lam: 1.5,     color: '#1a7a3c', label: 'η = 1.5  (< e)' },
-    { lam: Math.E,  color: '#0066cc', label: 'η = e     (경계)' },
-    { lam: 4.0,     color: '#c0392b', label: 'η = 4     (> e)' },
-  ];
-  curves.forEach(({ lam, color }) => g.drawCurve(u => H(lam, u), color, 2.5, 800));
-
-  // Mark zeros of λ=4 curve
-  findZeros(u => H(4, u), -0.2, 4.5, 4000).forEach(u => g.dot(u, 0, '#c0392b', 6));
-
-  // Legend (top-right)
-  const { ctx } = g;
-  ctx.save();
-  curves.forEach(({ color, label }, i) => {
-    const y0 = 14 + i * 34;
-    ctx.fillStyle = color;
-    ctx.fillRect(g.W - 230, y0 - 2, 30, 6);
-    ctx.fillStyle = '#333';
-    ctx.font = '16px "IBM Plex Sans KR","IBM Plex Sans",sans-serif';
-    ctx.textAlign = 'left';
-    ctx.fillText(label, g.W - 192, y0 + 6);
-  });
-  ctx.restore();
-
-  g.ticksX([-0, 1, 2, 3, 4], v => v, 22, 17);
-  g.ticksY([-2, -1, 1, 2], v => v, -8, 17);
 }
 
 // ════════════════════════════════════════════════════════

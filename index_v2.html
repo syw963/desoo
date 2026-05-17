@@ -31,7 +31,7 @@
 <div class="slide" id="slide-2">
   <div class="slide-header">
     <span class="chapter-label">목차</span>
-    <span class="page-num">2 / 18</span>
+    <span class="page-num">2 / 22</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">목차</h1>
@@ -54,7 +54,7 @@
 <div class="slide" id="slide-3">
   <div class="slide-header">
     <span class="chapter-label">Motivation</span>
-    <span class="page-num">3 / 18</span>
+    <span class="page-num">3 / 22</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">탐구 동기가 된 문제</h1>
@@ -73,7 +73,7 @@
 <div class="slide" id="slide-4">
   <div class="slide-header">
     <span class="chapter-label">Basic Problem</span>
-    <span class="page-num">4 / 18</span>
+    <span class="page-num">4 / 22</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">\(y=a^x\)와 \(x=a^y\)의 교점</h1>
@@ -107,7 +107,7 @@
 <div class="slide" id="slide-5">
   <div class="slide-header">
     <span class="chapter-label">Basic Problem</span>
-    <span class="page-num">5 / 18</span>
+    <span class="page-num">5 / 22</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">함수와 역함수의 교점 구조</h1>
@@ -157,7 +157,7 @@
 <div class="slide" id="slide-6">
   <div class="slide-header">
     <span class="chapter-label">Basic Problem</span>
-    <span class="page-num">6 / 18</span>
+    <span class="page-num">6 / 22</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">증가함수 (\(a &gt; 1\)) 교점 분류</h1>
@@ -223,31 +223,32 @@
 <div class="slide" id="slide-7">
   <div class="slide-header">
     <span class="chapter-label">Basic Problem</span>
-    <span class="page-num">7 / 18</span>
+    <span class="page-num">7 / 22</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">감소함수 (\(0 &lt; a &lt; 1\)) 교점 분류</h1>
   </div>
-  <div class="content-zone top-210" style="gap:20px;">
+  <div class="content-zone top-210" style="gap:22px;">
     <div class="cols" style="align-items:flex-start; gap:50px;">
-      <div class="col-5">
-        <div class="section-label">2-cycle Condition</div>
-        <div style="font-size:31px; line-height:1.8;">
-          \(\eta := -\ln a &gt; 0,\quad H_\eta(x) := \eta e^{-\eta e^{-x}} - x\)<br>
-          \(H'_\eta(x) = \eta^2 e^{-x - \eta e^{-x}} - 1 \;\leq\; \dfrac{\eta}{e} - 1\)<br><br>
-          \(\eta &gt; e \Rightarrow H_\eta\) has local extrema → 3 roots<br>
-          \(\eta \leq e \Rightarrow H_\eta\) decreasing → 1 root
-        </div>
-        <div class="box box-blue" style="margin-top:14px;">
-          <div class="box-body" style="font-size:31px;">
-            \(\eta = -\ln a &gt; e \;\Leftrightarrow\; a &lt; e^{-e}\)
-          </div>
+      <div class="col">
+        <div class="section-label">Intersection Structure</div>
+        <div style="font-size:30px; line-height:2.05; margin-top:12px;">
+          on \(y=x\) \(\;\Leftrightarrow\;\) fixed pt. of \(f\) (always 1)<br>
+          off \(y=x\) \(\;\Leftrightarrow\;\) 2-cycle pair of \(f\)<br>
+          2-cycle exists \(\;\Leftrightarrow\;\) \(|f'(x_*)| > 1\)
         </div>
       </div>
-      <div class="col-4">
-        <div class="section-label">Root Structure of \(H_\eta\)</div>
-        <div class="graph-wrap" style="gap:8px;">
-          <canvas id="canvas-hlambda" width="620" height="360"></canvas>
+      <div class="col">
+        <div class="section-label">Boundary \(a = e^{-e}\) Derivation</div>
+        <div style="font-size:30px; line-height:2.05; margin-top:12px;">
+          fixed pt.: \(a^{x_*} = x_* \;\Rightarrow\; x_* \ln a = \ln x_*\)<br>
+          boundary: \(f'(x_*) = \ln a \cdot x_* = -1\)<br>
+          solve: \(\ln x_* = -1 \;\Rightarrow\; x_* = \tfrac{1}{e},\;\; \boxed{a = e^{-e}}\)
+        </div>
+        <div class="box box-blue" style="margin-top:16px;">
+          <div class="box-body" style="font-size:30px; text-align:center;">
+            \(|f'(x_*)| \gtrless 1 \;\Leftrightarrow\; a \lessgtr e^{-e}\)
+          </div>
         </div>
       </div>
     </div>
@@ -255,7 +256,6 @@
       <thead>
         <tr>
           <th>Range of \(a\)</th>
-          <th>\(\eta = -\ln a\)</th>
           <th>Count</th>
           <th>Structure</th>
         </tr>
@@ -263,15 +263,13 @@
       <tbody>
         <tr>
           <td>\(0 &lt; a &lt; e^{-e}\)</td>
-          <td>\(\eta &gt; e\)</td>
           <td class="cnt-red">3</td>
-          <td>1 on \(y=x\) + 2-cycle pair</td>
+          <td>fixed pt. 1 + 2-cycle pair</td>
         </tr>
         <tr>
           <td>\(e^{-e} \leq a &lt; 1\)</td>
-          <td>\(0 &lt; \eta \leq e\)</td>
           <td class="cnt">1</td>
-          <td>1 on \(y=x\)</td>
+          <td>fixed pt. 1 only</td>
         </tr>
       </tbody>
     </table>
@@ -284,7 +282,7 @@
 <div class="slide" id="slide-8">
   <div class="slide-header">
     <span class="chapter-label">Lambert W</span>
-    <span class="page-num">8 / 18</span>
+    <span class="page-num">8 / 22</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">Lambert \(W\) 함수</h1>
@@ -325,12 +323,212 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════════
-     SLIDE 9  Lambert W로 교점 완전 분류
+     SLIDE 9  Lambert W 적용 — 고정점 유도
 ══════════════════════════════════════════════════════ -->
 <div class="slide" id="slide-9">
   <div class="slide-header">
     <span class="chapter-label">Lambert W</span>
-    <span class="page-num">9 / 18</span>
+    <span class="page-num">9 / 22</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">\(a^x = x\) — Lambert \(W\) 형태로 정리</h1>
+    <p class="slide-subtitle">fixed-pt. derivation</p>
+  </div>
+  <div class="content-zone" style="top:280px; gap:28px;">
+    <div class="box box-blue" style="padding:22px 40px;">
+      <div class="box-body" style="font-size:32px; line-height:2.2; text-align:center;">
+        \(a^x = x \;\Rightarrow\; e^{-x\eta} = x \quad (\eta = -\ln a)\)<br>
+        \(\xRightarrow{\;u\,=\,x\eta\;}\; ue^u = \eta \;\Rightarrow\; \boxed{\,x_* = \dfrac{W(\eta)}{\eta}\,}\)
+      </div>
+    </div>
+    <div class="cols" style="align-items:flex-start; gap:50px; margin-top:4px;">
+      <div class="col">
+        <div class="section-label">increasing \(\;(a > 1,\;\eta < 0)\)</div>
+        <div style="font-size:30px; line-height:2.0; margin-top:14px;">
+          \(\eta \in (-1/e,\;0)\): \(W_0,\;W_{-1}\) real → <strong>2</strong> fixed pts.<br>
+          \(\eta = -1/e\;\;(a = e^{1/e})\): \(W_0 = W_{-1} = -1\) → <strong>1</strong><br>
+          \(\eta < -1/e\;\;(a > e^{1/e})\): no real \(W\) → <strong>0</strong>
+        </div>
+      </div>
+      <div class="col">
+        <div class="section-label">decreasing \(\;(0 < a < 1,\;\eta > 0)\)</div>
+        <div style="font-size:30px; line-height:2.0; margin-top:14px;">
+          \(W_0(\eta) > 0\) always → <strong>1</strong> fixed pt. always<br>
+          \(|f'(x_*)| = W_0(\eta)\)<br>
+          \(W_0(\eta) > 1 \;\Leftrightarrow\; \eta > e \;\Leftrightarrow\; a < e^{-e}\) → 2-cycle
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 10  감소형 h(x)=0 reduction
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-10">
+  <div class="slide-header">
+    <span class="chapter-label">Lambert W</span>
+    <span class="page-num">10 / 22</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">감소형 — \(h(x)=0\) 변환</h1>
+    <p class="slide-subtitle">\(x = a^{a^x}\;\) via \(\;\eta = -\ln a > 0\)</p>
+  </div>
+  <div class="content-zone" style="top:285px; gap:24px;">
+    <div class="cols" style="align-items:flex-start; gap:56px;">
+      <div class="col">
+        <div class="section-label">Substitution</div>
+        <div style="font-size:30px; line-height:2.05; margin-top:12px;">
+          \(a = e^{-\eta} \;\Rightarrow\; a^x = e^{-\eta x}\)<br>
+          \(x = a^{a^x} \;\Rightarrow\; \ln x = a^x \ln a\)<br>
+          \(\phantom{\ln x\,} = -\eta e^{-\eta x}\)
+        </div>
+        <div class="box box-blue" style="margin-top:18px;">
+          <div class="box-body txt-sm">
+            \(h(x) = \ln x + \eta e^{-\eta x}\)<br>
+            zeros of \(h\) \(\;\Leftrightarrow\;\) solutions of \(x = a^{a^x}\)
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="section-label">Critical pts. of \(h\)</div>
+        <div style="font-size:30px; line-height:2.05; margin-top:12px;">
+          \(h'(x) = \dfrac{1}{x} - \eta^2 e^{-\eta x} = 0\)<br>
+          \(\Rightarrow\; (-\eta x)\,e^{-\eta x} = -\dfrac{1}{\eta}\)<br>
+          \(\Rightarrow\; \boxed{x = -\dfrac{1}{\eta}\,W\!\left(-\dfrac{1}{\eta}\right)}\)
+        </div>
+        <div class="box box-gray" style="margin-top:14px;">
+          <div class="box-body txt-sm">
+            real \(W\) exists \(\;\Leftrightarrow\; {-\dfrac{1}{\eta}} \geq {-\dfrac{1}{e}} \;\Leftrightarrow\; \eta \geq e\)
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 11  감소형 경우 분류
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-11">
+  <div class="slide-header">
+    <span class="chapter-label">Lambert W</span>
+    <span class="page-num">11 / 22</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">경우 분류 — \(h=0\) 의 근 개수</h1>
+    <p class="slide-subtitle">\(h(x) = \ln x + \eta e^{-\eta x}, \qquad \eta = -\ln a\)</p>
+  </div>
+  <div class="content-zone" style="top:285px; gap:20px;">
+    <div class="cols" style="align-items:flex-start; gap:28px;">
+      <div class="col">
+        <div class="section-label">\(0 < \eta < e\;\;(e^{-e} < a < 1)\)</div>
+        <div style="font-size:28px; line-height:2.0; margin-top:14px;">
+          no real critical pts.<br>
+          \(h\) strictly incr.<br>
+          \(h(0^+) = -\infty,\;\; h(\infty) = +\infty\)
+        </div>
+        <div class="box box-gray" style="margin-top:16px;">
+          <div class="box-body" style="text-align:center; font-size:30px;">
+            → <strong>1</strong> zero
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="section-label">\(\eta = e\;\;(a = e^{-e})\)</div>
+        <div style="font-size:28px; line-height:2.0; margin-top:14px;">
+          one critical pt. at \(x = 1/e\)<br>
+          \(h\!\left(\tfrac{1}{e}\right) = \ln\tfrac{1}{e} + e\cdot e^{-1}\)<br>
+          \(\phantom{h\!\left(\tfrac{1}{e}\right)} = -1 + 1 = 0\)
+        </div>
+        <div class="box box-gray" style="margin-top:16px;">
+          <div class="box-body" style="text-align:center; font-size:30px;">
+            → <strong>1</strong> zero (tangent)
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="section-label">\(\eta > e\;\;(0 < a < e^{-e})\)</div>
+        <div style="font-size:28px; line-height:2.0; margin-top:14px;">
+          \(x_1 = -\tfrac{1}{\eta}W_0\!\left(-\tfrac{1}{\eta}\right)\)<br>
+          \(x_2 = -\tfrac{1}{\eta}W_{-1}\!\left(-\tfrac{1}{\eta}\right)\)<br>
+          local max \(> 0\), local min \(< 0\)
+        </div>
+        <div class="box box-gray" style="margin-top:16px;">
+          <div class="box-body" style="text-align:center; font-size:30px;">
+            → <strong>3</strong> zeros
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="box box-blue" style="padding:16px 36px;">
+      <div class="box-body txt-md txt-center">
+        \(\eta \gtrless e \;\Leftrightarrow\; a \gtrless e^{-e}\)
+        &emsp;boundary: \(\;\boxed{a = e^{-e}}\;\;(\eta = e)\)
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 12  local max/min 부호 증명
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-12">
+  <div class="slide-header">
+    <span class="chapter-label">Lambert W</span>
+    <span class="page-num">12 / 22</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">극대 \(> 0\), 극소 \(< 0\) 증명</h1>
+    <p class="slide-subtitle">proof for \(\eta > e\)</p>
+  </div>
+  <div class="content-zone" style="top:285px; gap:22px;">
+    <div class="cols" style="align-items:flex-start; gap:56px;">
+      <div class="col">
+        <div class="section-label">Setting up \(F(t)\)</div>
+        <div style="font-size:29px; line-height:2.05; margin-top:12px;">
+          \(t = \eta x \;\Rightarrow\) critical pt. cond.: \(\;te^{-t} = \dfrac{1}{\eta}\)<br>
+          \(\eta > e \;\Rightarrow\; \dfrac{1}{\eta} < \dfrac{1}{e} = \max(te^{-t})\)<br>
+          \(\Rightarrow\; 0 < t_1 < 1 < t_2\)
+        </div>
+        <div style="font-size:29px; line-height:2.05; margin-top:16px;">
+          at \(x = t/\eta\): \(\;\eta e^{-t} = \dfrac{1}{t},\quad \ln\eta = t - \ln t\)<br>
+          \(h\!\left(\tfrac{t}{\eta}\right) = \ln t - \ln\eta + \tfrac{1}{t} = 2\ln t - t + \tfrac{1}{t}\)
+        </div>
+        <div class="box box-blue" style="margin-top:14px;">
+          <div class="box-body txt-sm" style="text-align:center;">
+            \(F(t) \;=\; 2\ln t - t + \dfrac{1}{t}\)
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="section-label">Sign of \(F(t)\)</div>
+        <div style="font-size:29px; line-height:2.05; margin-top:12px;">
+          \(F'(t) = \dfrac{2}{t} - 1 - \dfrac{1}{t^2} = -\dfrac{(t-1)^2}{t^2} \leq 0\)<br>
+          \(F\) strictly decr.,\quad \(F(1) = 2\cdot 0 - 1 + 1 = 0\)
+        </div>
+        <div style="font-size:29px; line-height:2.05; margin-top:16px;">
+          \(t_1 < 1 \;\Rightarrow\; F(t_1) > 0\quad\) (local max \(> 0\))<br>
+          \(t_2 > 1 \;\Rightarrow\; F(t_2) < 0\quad\) (local min \(< 0\))
+        </div>
+        <div class="box box-gray" style="margin-top:14px;">
+          <div class="box-body txt-sm">
+            \(h(x_1) = F(t_1) > 0,\quad h(x_2) = F(t_2) < 0\)<br>
+            \(\Rightarrow\; h\) crosses \(x\)-axis <strong>3 times</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 13  Lambert W로 교점 완전 분류
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-13">
+  <div class="slide-header">
+    <span class="chapter-label">Lambert W</span>
+    <span class="page-num">13 / 22</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">\(y=a^x,\; x=a^y\) — Lambert \(W\)로 완전 분류</h1>
@@ -408,10 +606,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 10  일반화 소개
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-10">
+<div class="slide" id="slide-14">
   <div class="slide-header">
     <span class="chapter-label">Generalization</span>
-    <span class="page-num">10 / 18</span>
+    <span class="page-num">14 / 22</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">일반화된 함수 \(f(x) = ka^x + b\)</h1>
@@ -457,10 +655,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 11  제어변수 η
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-11">
+<div class="slide" id="slide-15">
   <div class="slide-header">
     <span class="chapter-label">Generalization</span>
-    <span class="page-num">11 / 18</span>
+    <span class="page-num">15 / 22</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">Control Variable \(\eta\)</h1>
@@ -504,10 +702,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 12  증가형 교점
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-12">
+<div class="slide" id="slide-16">
   <div class="slide-header">
     <span class="chapter-label">Generalization</span>
-    <span class="page-num">12 / 18</span>
+    <span class="page-num">16 / 22</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">증가형 (\(k \ln a &gt; 0\)) 교점 분류</h1>
@@ -572,10 +770,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 13  감소형 교점
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-13">
+<div class="slide" id="slide-17">
   <div class="slide-header">
     <span class="chapter-label">Generalization</span>
-    <span class="page-num">13 / 18</span>
+    <span class="page-num">17 / 22</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">감소형 (\(k \ln a &lt; 0\)) 교점 분류</h1>
@@ -636,10 +834,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 14  무한 지수탑 소개
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-14">
+<div class="slide" id="slide-18">
   <div class="slide-header">
     <span class="chapter-label">Infinite Tower</span>
-    <span class="page-num">14 / 18</span>
+    <span class="page-num">18 / 22</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">무한 지수탑</h1>
@@ -685,10 +883,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 15  탑과 Lambert W
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-15">
+<div class="slide" id="slide-19">
   <div class="slide-header">
     <span class="chapter-label">Infinite Tower</span>
-    <span class="page-num">15 / 18</span>
+    <span class="page-num">19 / 22</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">무한 지수탑과 Lambert \(W\) 함수</h1>
@@ -731,10 +929,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 16  경계의 연관성
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-16">
+<div class="slide" id="slide-20">
   <div class="slide-header">
     <span class="chapter-label">Connection</span>
-    <span class="page-num">16 / 18</span>
+    <span class="page-num">20 / 22</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">수렴 경계와 교점 경계의 일치</h1>
@@ -782,10 +980,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 17  요약
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-17">
+<div class="slide" id="slide-21">
   <div class="slide-header">
     <span class="chapter-label">Summary</span>
-    <span class="page-num">17 / 18</span>
+    <span class="page-num">21 / 22</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">요약</h1>
@@ -846,7 +1044,7 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 18  마무리
 ══════════════════════════════════════════════════════ -->
-<div class="slide slide-outro" id="slide-18">
+<div class="slide slide-outro" id="slide-22">
   <div class="outro-inner">
     <div class="outro-main">감사합니다</div>
   </div>
@@ -858,7 +1056,7 @@
 <!-- ─── Navigation Bar ──────────────────────────────── -->
 <div id="nav-bar">
   <button id="btn-prev" disabled>&#8592;</button>
-  <span id="slide-counter">1 / 18</span>
+  <span id="slide-counter">1 / 22</span>
   <button id="btn-next">&#8594;</button>
 </div>
 
