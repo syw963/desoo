@@ -233,19 +233,19 @@
       <div class="col-5">
         <div class="section-label">2-cycle Condition</div>
         <div style="font-size:31px; line-height:1.8;">
-          \(\lambda := -\ln a &gt; 0,\quad H_\lambda(u) := \lambda e^{-\lambda e^{-u}} - u\)<br>
-          \(H'_\lambda(u) = \lambda^2 e^{-u - \lambda e^{-u}} - 1 \;\leq\; \dfrac{\lambda}{e} - 1\)<br><br>
-          \(\lambda &gt; e \Rightarrow H_\lambda\) has local extrema → 3 roots<br>
-          \(\lambda \leq e \Rightarrow H_\lambda\) decreasing → 1 root
+          \(\eta := -\ln a &gt; 0,\quad H_\eta(x) := \eta e^{-\eta e^{-x}} - x\)<br>
+          \(H'_\eta(x) = \eta^2 e^{-x - \eta e^{-x}} - 1 \;\leq\; \dfrac{\eta}{e} - 1\)<br><br>
+          \(\eta &gt; e \Rightarrow H_\eta\) has local extrema → 3 roots<br>
+          \(\eta \leq e \Rightarrow H_\eta\) decreasing → 1 root
         </div>
         <div class="box box-blue" style="margin-top:14px;">
           <div class="box-body" style="font-size:31px;">
-            \(\lambda = -\ln a &gt; e \;\Leftrightarrow\; a &lt; e^{-e}\)
+            \(\eta = -\ln a &gt; e \;\Leftrightarrow\; a &lt; e^{-e}\)
           </div>
         </div>
       </div>
       <div class="col-4">
-        <div class="section-label">Root Structure of \(H_\lambda\)</div>
+        <div class="section-label">Root Structure of \(H_\eta\)</div>
         <div class="graph-wrap" style="gap:8px;">
           <canvas id="canvas-hlambda" width="620" height="360"></canvas>
         </div>
@@ -255,7 +255,7 @@
       <thead>
         <tr>
           <th>Range of \(a\)</th>
-          <th>\(\lambda = -\ln a\)</th>
+          <th>\(\eta = -\ln a\)</th>
           <th>Count</th>
           <th>Structure</th>
         </tr>
@@ -263,13 +263,13 @@
       <tbody>
         <tr>
           <td>\(0 &lt; a &lt; e^{-e}\)</td>
-          <td>\(\lambda &gt; e\)</td>
+          <td>\(\eta &gt; e\)</td>
           <td class="cnt-red">3</td>
           <td>1 on \(y=x\) + 2-cycle pair</td>
         </tr>
         <tr>
           <td>\(e^{-e} \leq a &lt; 1\)</td>
-          <td>\(0 &lt; \lambda \leq e\)</td>
+          <td>\(0 &lt; \eta \leq e\)</td>
           <td class="cnt">1</td>
           <td>1 on \(y=x\)</td>
         </tr>

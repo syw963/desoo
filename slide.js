@@ -622,9 +622,9 @@ function drawHLambdaGraph() {
 
   // Three lambda values
   const curves = [
-    { lam: 1.5,     color: '#1a7a3c', label: 'λ = 1.5  (< e)' },
-    { lam: Math.E,  color: '#0066cc', label: 'λ = e     (경계)' },
-    { lam: 4.0,     color: '#c0392b', label: 'λ = 4     (> e)' },
+    { lam: 1.5,     color: '#1a7a3c', label: 'η = 1.5  (< e)' },
+    { lam: Math.E,  color: '#0066cc', label: 'η = e     (경계)' },
+    { lam: 4.0,     color: '#c0392b', label: 'η = 4     (> e)' },
   ];
   curves.forEach(({ lam, color }) => g.drawCurve(u => H(lam, u), color, 2.5, 800));
 
