@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>지수함수와 그 역함수의 교점</title>
+  <link rel="stylesheet" href="slide.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+</head>
+<body>
+
+<div id="slide-viewport">
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 1  COVER
+══════════════════════════════════════════════════════ -->
+<div class="slide slide-cover active" id="slide-1">
+  <div class="cover-inner">
+    <div class="cover-tag">대수 발표</div>
+    <h1 class="cover-title">지수함수와 그 역함수의 교점</h1>
+    <p class="cover-sub">교점 → Lambert \(W\) → 무한지수탑</p>
+  </div>
+  <div class="cover-line"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 2  목차
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-2">
+  <div class="slide-header">
+    <span class="chapter-label">목차</span>
+    <span class="page-num">2 / 18</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">목차</h1>
+  </div>
+  <div class="content-zone top-210">
+    <ol class="toc-list">
+      <li class="toc-item"><span class="toc-num">01</span><span class="toc-text">탐구 동기 — \(y=a^x\)와 \(x=a^y\)의 교점</span></li>
+      <li class="toc-item"><span class="toc-num">02</span><span class="toc-text">기본 문제 해결 — 증가형·감소형 완전 분류</span></li>
+      <li class="toc-item"><span class="toc-num">03</span><span class="toc-text">Lambert \(W\) 함수 소개 및 적용</span></li>
+      <li class="toc-item"><span class="toc-num">04</span><span class="toc-text">일반화된 \(f(x)=ka^x+b\) 의 교점 분류</span></li>
+      <li class="toc-item"><span class="toc-num">05</span><span class="toc-text">무한 지수탑 소개</span></li>
+      <li class="toc-item"><span class="toc-num">06</span><span class="toc-text">무한 지수탑과 교점 경계의 연관성</span></li>
+    </ol>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 3  탐구 동기
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-3">
+  <div class="slide-header">
+    <span class="chapter-label">탐구 동기</span>
+    <span class="page-num">3 / 18</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">탐구 동기가 된 문제</h1>
+    <p class="slide-subtitle">\(y=a^x\)와 \(x=a^y\)의 교점은 어떤 양상을 보이는가?</p>
+  </div>
+  <div class="content-zone top-260">
+    <div class="problem-img-wrap">
+      <img src="problem.png" alt="탐구 문제">
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 4  인터랙티브 그래프
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-4">
+  <div class="slide-header">
+    <span class="chapter-label">기본 문제</span>
+    <span class="page-num">4 / 18</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">\(y=a^x\)와 \(x=a^y\)의 교점 — 인터랙티브</h1>
+  </div>
+  <div class="content-zone top-210" style="gap:16px;">
+    <div class="graph-wrap">
+      <canvas id="canvas-slide4" width="1200" height="540"></canvas>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-line" style="background:#0066cc;"></div><span class="txt-sm">\(y = a^x\)</span></div>
+        <div class="legend-item"><div class="legend-line" style="background:#c0392b;"></div><span class="txt-sm">\(y = \log_a x\)</span></div>
+        <div class="legend-item"><div class="legend-dash" style="border-color:#888;"></div><span class="txt-sm">\(y = x\)</span></div>
+        <div class="legend-item" style="margin-left:24px;"><div style="width:18px;height:18px;background:#0066cc;border-radius:50%;"></div><span class="txt-sm" style="margin-left:8px;">교점</span></div>
+      </div>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">\(a = \)</span>
+      <input type="range" id="a-slider" min="0.15" max="2.8" step="0.01" value="1.2">
+      <span class="slider-value" id="a-value">\(1.20\)</span>
+    </div>
+    <div class="intersect-info" id="intersect-info">교점 개수: <strong id="intersect-count">—</strong></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 5  역함수와 교점의 대칭성
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-5">
+  <div class="slide-header">
+    <span class="chapter-label">기본 문제</span>
+    <span class="page-num">5 / 18</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">함수와 역함수의 교점 구조</h1>
+    <p class="slide-subtitle">\(y=x\) 위 교점 vs. \(y=x\) 밖 교점</p>
+  </div>
+  <div class="content-zone top-260">
+    <div class="cols">
+      <div class="col">
+        <div class="section-label">대각선 위 고정점</div>
+        <div class="box box-blue" style="margin-bottom:28px;">
+          <div class="box-body">
+            \(y = f(x)\) 와 \(y = f^{-1}(x)\) 의 교점 \((x_0,y_0)\) 에서<br>
+            \(y_0 = x_0\) 이면 \(\;f(x_0) = x_0\)
+          </div>
+        </div>
+        <div class="section-label" style="margin-top:20px;">대각선 밖 2주기점</div>
+        <div class="box box-red">
+          <div class="box-body">
+            \(y_0 \neq x_0\) 이면 \((y_0, x_0)\) 도 교점<br>
+            \((y=x\) 에 대해 대칭\()\)<br>
+            \(f(f(x_0)) = x_0, \quad f(x_0) \neq x_0\)
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="section-label">원래 문제에 적용</div>
+        <div style="font-size:34px; line-height:1.7; padding: 10px 0;">
+          교점 \((x,y)\) 가 \(y=a^x\), \(x=a^y\) 를 만족<br>
+          \(\Rightarrow\; x = a^{a^x} = f(f(x))\)<br><br>
+          따라서 교점은 \(f^2(x)=x\) 의 해
+        </div>
+        <div class="box box-gray" style="margin-top:20px;">
+          <div class="box-title" style="color:#3a3a3c;">분류 원칙</div>
+          <div class="box-body txt-sm">
+            증가형 \(f\) → 대각선 밖 교점 <strong>불가</strong><br>
+            감소형 \(f\) → 대각선 밖 교점 <strong>가능</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 6  증가함수 교점
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-6">
+  <div class="slide-header">
+    <span class="chapter-label">기본 문제</span>
+    <span class="page-num">6 / 18</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">증가함수 (\(a &gt; 1\)) 교점 분류</h1>
+  </div>
+  <div class="content-zone top-210" style="gap:20px;">
+    <div class="cols" style="align-items:stretch; gap:50px;">
+      <div class="col-6">
+        <div class="section-label">대각선 위 해의 조건</div>
+        <div style="font-size:34px; line-height:1.85;">
+          \(a^x = x \;\Leftrightarrow\; \ln a = \dfrac{\ln x}{x}\)<br>
+          \(h(x) = \dfrac{\ln x}{x},\quad h'(x) = \dfrac{1-\ln x}{x^2}\)<br>
+          최댓값: \(\;h(e) = \dfrac{1}{e}\)
+        </div>
+        <div class="box box-blue" style="margin-top:18px;">
+          <div class="box-body">
+            \(\ln a \leq \dfrac{1}{e}\;\Leftrightarrow\; a \leq e^{1/e}\) 일 때 해 존재
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="section-label">그래프 \(h(x) = \ln x / x\)</div>
+        <div class="graph-wrap" style="gap:8px;">
+          <canvas id="canvas-hx" width="600" height="320"></canvas>
+        </div>
+      </div>
+    </div>
+    <table class="class-table">
+      <thead>
+        <tr>
+          <th>\(a\) 의 범위</th>
+          <th>\(-\ln a\) (\(=\eta\))</th>
+          <th>교점 수</th>
+          <th>구조</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>\(1 &lt; a &lt; e^{1/e}\)</td>
+          <td>\(-1/e &lt; \eta &lt; 0\)</td>
+          <td class="cnt">2</td>
+          <td>\(y=x\) 위 2개</td>
+        </tr>
+        <tr>
+          <td>\(a = e^{1/e}\)</td>
+          <td>\(\eta = -1/e\)</td>
+          <td class="cnt">1</td>
+          <td>\(y=x\) 위 접점</td>
+        </tr>
+        <tr>
+          <td>\(a &gt; e^{1/e}\)</td>
+          <td>\(\eta &lt; -1/e\)</td>
+          <td class="cnt">0</td>
+          <td>교점 없음</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 7  감소함수 교점
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-7">
+  <div class="slide-header">
+    <span class="chapter-label">기본 문제</span>
+    <span class="page-num">7 / 18</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">감소함수 (\(0 &lt; a &lt; 1\)) 교점 분류</h1>
+  </div>
+  <div class="content-zone top-210" style="gap:20px;">
+    <div class="cols" style="align-items:flex-start; gap:50px;">
+      <div class="col-5">
+        <div class="section-label">2주기점 존재 조건</div>
+        <div style="font-size:31px; line-height:1.8;">
+          \(\lambda := -\ln a &gt; 0,\quad H_\lambda(u) := \lambda e^{-\lambda e^{-u}} - u\)<br>
+          \(H'_\lambda(u) = \lambda^2 e^{-u - \lambda e^{-u}} - 1 \;\leq\; \dfrac{\lambda}{e} - 1\)<br><br>
+          \(\lambda &gt; e\) 이면 \(H_\lambda\) 가 극값을 가짐 → 근 3개<br>
+          \(\lambda \leq e\) 이면 \(H_\lambda\) 단조감소 → 근 1개
+        </div>
+        <div class="box box-blue" style="margin-top:14px;">
+          <div class="box-body" style="font-size:31px;">
+            \(\lambda = -\ln a &gt; e \;\Leftrightarrow\; a &lt; e^{-e}\)
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="section-label">\(H_\lambda\) 의 근 구조 변화</div>
+        <div class="graph-wrap" style="gap:8px;">
+          <canvas id="canvas-hlambda" width="620" height="360"></canvas>
+        </div>
+      </div>
+    </div>
+    <table class="class-table">
+      <thead>
+        <tr>
+          <th>\(a\) 의 범위</th>
+          <th>\(\lambda = -\ln a\)</th>
+          <th>교점 수</th>
+          <th>구조</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>\(0 &lt; a &lt; e^{-e}\)</td>
+          <td>\(\lambda &gt; e\)</td>
+          <td class="cnt-red">3</td>
+          <td>\(y=x\) 위 1개 + 대칭쌍 2개</td>
+        </tr>
+        <tr>
+          <td>\(e^{-e} \leq a &lt; 1\)</td>
+          <td>\(0 &lt; \lambda \leq e\)</td>
+          <td class="cnt">1</td>
+          <td>\(y=x\) 위 1개</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 8  Lambert W 소개
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-8">
+  <div class="slide-header">
+    <span class="chapter-label">Lambert W</span>
+    <span class="page-num">8 / 18</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">Lambert \(W\) 함수</h1>
+    <p class="slide-subtitle">\(w \mapsto we^w\) 의 역함수</p>
+  </div>
+  <div class="content-zone top-260" style="gap:24px;">
+    <div class="cols" style="align-items:flex-start; gap:56px;">
+      <div class="col-5">
+        <div class="section-label">정의</div>
+        <div class="display-math-sm">\[ W(xe^x) = x \]</div>
+        <div class="section-label" style="margin-top:18px;">실수 가지</div>
+        <ul class="bullet-list sm" style="margin-top:8px;">
+          <li>\(W_0\) (주가지): \(x \in [-e^{-1}, \infty)\), \(W_0 \geq -1\)</li>
+          <li>\(W_{-1}\) (하위가지): \(x \in [-e^{-1}, 0)\), \(W_{-1} \leq -1\)</li>
+          <li>\(x \in (-e^{-1}, 0)\) 에서 두 실수 가지</li>
+          <li>\(W_0(-1/e) = W_{-1}(-1/e) = -1\)</li>
+        </ul>
+        <div class="box box-blue" style="margin-top:22px;">
+          <div class="box-body txt-sm">
+            \(x \in (-1/e,\; 0)\)이면 실수 가지 2개<br>
+            \(x \in [0, \infty)\)이면 실수 가지 1개 (\(W_0\))<br>
+            \(x &lt; -1/e\)이면 실수 가지 없음
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="section-label">그래프</div>
+        <div class="graph-wrap" style="gap:8px;">
+          <canvas id="canvas-lambertw" width="720" height="490"></canvas>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-line" style="background:#0066cc;"></div><span class="txt-sm">\(W_0\) (주가지)</span></div>
+            <div class="legend-item"><div class="legend-line" style="background:#c0392b;"></div><span class="txt-sm">\(W_{-1}\) (하위가지)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 9  Lambert W로 교점 완전 분류
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-9">
+  <div class="slide-header">
+    <span class="chapter-label">Lambert W</span>
+    <span class="page-num">9 / 18</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">\(y=a^x,\; x=a^y\) — Lambert \(W\)로 완전 분류</h1>
+  </div>
+  <div class="content-zone top-210" style="gap:26px;">
+    <div class="box box-blue" style="padding:20px 36px;">
+      <div class="box-body txt-md txt-center">
+        대각선 위 해: \(\quad x_* = -\dfrac{W(-\ln a)}{\ln a}\) \(\quad\) (\(\eta = -\ln a\))
+      </div>
+    </div>
+    <table class="class-table">
+      <thead>
+        <tr>
+          <th>\(a\) 의 범위</th>
+          <th>\(\eta = -\ln a\)</th>
+          <th>교점 수</th>
+          <th>구조</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>\(0 &lt; a &lt; e^{-e}\)</td>
+          <td>\(\eta &gt; e\)</td>
+          <td class="cnt-red">3</td>
+          <td>\(y=x\) 위 1 + 대칭쌍 2</td>
+        </tr>
+        <tr>
+          <td>\(e^{-e} \leq a &lt; 1\)</td>
+          <td>\(0 &lt; \eta \leq e\)</td>
+          <td class="cnt">1</td>
+          <td>\(y=x\) 위 1 (고정점)</td>
+        </tr>
+        <tr>
+          <td>\(a = 1\)</td>
+          <td>\(\eta = 0\)</td>
+          <td class="cnt">1</td>
+          <td>퇴화: \((1,1)\)</td>
+        </tr>
+        <tr>
+          <td class="highlight">\(1 &lt; a &lt; e^{1/e}\)</td>
+          <td class="highlight">\(-1/e &lt; \eta &lt; 0\)</td>
+          <td class="cnt">2</td>
+          <td>\(y=x\) 위 2개 (\(W_0, W_{-1}\))</td>
+        </tr>
+        <tr>
+          <td>\(a = e^{1/e}\)</td>
+          <td>\(\eta = -1/e\)</td>
+          <td class="cnt">1</td>
+          <td>\(y=x\) 위 접점</td>
+        </tr>
+        <tr>
+          <td>\(a &gt; e^{1/e}\)</td>
+          <td>\(\eta &lt; -1/e\)</td>
+          <td class="cnt">0</td>
+          <td>실수 교점 없음</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="box box-gray">
+      <div class="box-body txt-sm">
+        임계값 \(e^{-e} \approx 0.0660\), \(\;e^{1/e} \approx 1.4447\) — 두 경계는 \(|f'(x_*)| = 1\) 조건에서 유도
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 10  일반화 소개
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-10">
+  <div class="slide-header">
+    <span class="chapter-label">일반화</span>
+    <span class="page-num">10 / 18</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">일반화된 함수 \(f(x) = ka^x + b\)</h1>
+    <p class="slide-subtitle">\(y = f(x)\) 와 \(y = f^{-1}(x)\) 의 교점</p>
+  </div>
+  <div class="content-zone top-260" style="gap:30px;">
+    <div class="cols" style="gap:60px; align-items:flex-start;">
+      <div class="col">
+        <div class="section-label">일반화 조건</div>
+        <ul class="bullet-list sm" style="margin-top:12px;">
+          <li>\(a &gt; 0,\; a \neq 1,\; k \neq 0\)</li>
+          <li>\(b\) 는 임의의 실수 (수직 이동)</li>
+          <li>원래 문제: \(k = 1,\; b = 0\)</li>
+        </ul>
+        <div class="section-label" style="margin-top:28px;">핵심 예시</div>
+        <div class="box box-blue" style="margin-top:12px;">
+          <div class="box-title">예시: \(f(x) = 4 \cdot (0.5)^x\)</div>
+          <div class="box-body txt-sm">
+            교점 \((1,2)\), \((2,1)\) — 정수쌍!<br>
+            \(\;4 \cdot 0.5^1 = 2, \quad 4 \cdot 0.5^2 = 1\)<br>
+            대각선 위 고정점: \(x_* \approx 1.457\)
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="section-label">교점 조건</div>
+        <div style="font-size:34px; line-height:2.0;">
+          \(y = ka^x + b\) 와 \(x = ka^y + b\) 동시 만족<br>
+          \(\Leftrightarrow\; f(f(x)) = x\)<br><br>
+          대각선 위: \(\; f(x) = x\)<br>
+          대각선 밖: \(\; f(x) \neq x,\; f(f(x)) = x\)
+        </div>
+        <div class="box box-gray" style="margin-top:20px;">
+          <div class="box-body txt-sm">
+            원래 문제와 <strong>동일한 구조</strong> — 하나의 매개변수 \(\eta\) 로 통합 가능
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 11  제어변수 η
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-11">
+  <div class="slide-header">
+    <span class="chapter-label">일반화</span>
+    <span class="page-num">11 / 18</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">제어변수 \(\eta\) 도입</h1>
+    <p class="slide-subtitle">평행이동 제거 → Lambert \(W\) 형 변형</p>
+  </div>
+  <div class="content-zone top-260" style="gap:28px;">
+    <div class="cols" style="gap:60px; align-items:flex-start;">
+      <div class="col">
+        <div class="section-label">변수 치환</div>
+        <div style="font-size:34px; line-height:2.1;">
+          \(X := x - b,\quad Y := y - b\)<br>
+          \(K := ka^b,\quad c := \ln a\)<br><br>
+          변환 결과:<br>
+          \(Y = Ke^{cX},\quad X = Ke^{cY}\)
+        </div>
+      </div>
+      <div class="col">
+        <div class="section-label">제어변수 정의</div>
+        <div class="display-math">\[ \eta := -cK = -ka^b \ln a \]</div>
+        <div style="font-size:33px; line-height:1.9; margin-top:8px;">
+          대각선 위 해 \((X = Y)\):<br>
+          \(Xe^{-cX} = K\;\Rightarrow\;(-cX)e^{-cX} = -cK = \eta\)<br>
+          \(\Rightarrow\; -cX = W_j(\eta)\)
+        </div>
+      </div>
+    </div>
+    <div class="box box-blue">
+      <div class="box-title">일반화된 교점 공식</div>
+      <div class="box-body txt-md txt-center">
+        \(x_* = b - \dfrac{1}{\ln a}\,W_j(\eta)\)
+      </div>
+    </div>
+    <div class="box box-gray">
+      <div class="box-body txt-sm">
+        원래 문제 (\(k=1, b=0\)): \(\eta = -\ln a\), \(\; x_* = -W(-\ln a)/\ln a\) — 앞 공식과 일치
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 12  증가형 교점
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-12">
+  <div class="slide-header">
+    <span class="chapter-label">일반화</span>
+    <span class="page-num">12 / 18</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">증가형 (\(k \ln a &gt; 0\)) 교점 분류</h1>
+  </div>
+  <div class="content-zone top-210" style="gap:26px;">
+    <div class="cols" style="gap:56px; align-items:flex-start;">
+      <div class="col-5">
+        <div class="section-label">단조성 논법</div>
+        <div style="font-size:32px; line-height:1.9;">
+          \(f\) 증가, \((x_0, y_0)\) 가 교점이고 \(x_0 &lt; y_0\) 이면:<br>
+          \(f(x_0) &lt; f(y_0) \;\Rightarrow\; y_0 &lt; x_0\) — 모순<br><br>
+          ∴ 증가형에서 대각선 밖 교점 <strong>불가능</strong><br>
+          모든 교점은 \(y=x\) 위에만 존재
+        </div>
+        <div class="box box-blue" style="margin-top:20px;">
+          <div class="box-body txt-sm">
+            \(k\ln a &gt; 0 \;\Rightarrow\; \eta = -ka^b\ln a &lt; 0\)<br>
+            교점 수 = Lambert \(W\) 의 실수 가지 수
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="section-label">분류표</div>
+        <table class="class-table" style="margin-top:12px;">
+          <thead>
+            <tr>
+              <th>\(\eta\) 범위</th>
+              <th>교점 수</th>
+              <th>비고</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>\(-1/e &lt; \eta &lt; 0\)</td>
+              <td class="cnt">2</td>
+              <td>\(W_0, W_{-1}\) 두 가지</td>
+            </tr>
+            <tr>
+              <td>\(\eta = -1/e\)</td>
+              <td class="cnt">1</td>
+              <td>접점</td>
+            </tr>
+            <tr>
+              <td>\(\eta &lt; -1/e\)</td>
+              <td class="cnt">0</td>
+              <td>교점 없음</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="box box-gray" style="margin-top:18px;">
+          <div class="box-body txt-sm">
+            안정성: \(f'(x_*) = -W_j(\eta)\)<br>
+            \(W_0\) 가지: \(|W_0| &lt; 1\) → attracting<br>
+            \(W_{-1}\) 가지: \(|W_{-1}| &gt; 1\) → repelling
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 13  감소형 교점
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-13">
+  <div class="slide-header">
+    <span class="chapter-label">일반화</span>
+    <span class="page-num">13 / 18</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">감소형 (\(k \ln a &lt; 0\)) 교점 분류</h1>
+  </div>
+  <div class="content-zone top-210" style="gap:26px;">
+    <div class="cols" style="gap:56px; align-items:flex-start;">
+      <div class="col-5">
+        <div class="section-label">임계값 유도</div>
+        <div style="font-size:32px; line-height:2.0;">
+          \(\eta = |k|a^b|\ln a| &gt; 0\)<br>
+          \(f'(x_*) = -W_0(\eta)\)<br><br>
+          \(|f'(x_*)| = 1 \;\Leftrightarrow\; W_0(\eta) = 1\)<br>
+          \(\Leftrightarrow\; \eta = 1 \cdot e^1 = e\)
+        </div>
+        <div class="box box-red" style="margin-top:16px;">
+          <div class="box-body txt-sm">
+            \(\eta &gt; e\) 이면 고정점이 불안정해짐<br>
+            → 대각선 밖 2주기점 2개 추가
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="section-label">분류표</div>
+        <table class="class-table" style="margin-top:12px;">
+          <thead>
+            <tr>
+              <th>\(\eta\) 범위</th>
+              <th>교점 수</th>
+              <th>구조</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>\(0 &lt; \eta \leq e\)</td>
+              <td class="cnt">1</td>
+              <td>\(y=x\) 위 고정점</td>
+            </tr>
+            <tr>
+              <td>\(\eta &gt; e\)</td>
+              <td class="cnt-red">3</td>
+              <td>\(y=x\) 위 1 + 밖 2주기쌍</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="box box-blue" style="margin-top:18px;">
+          <div class="box-title">예시 \(f(x) = 4 \cdot (0.5)^x\)</div>
+          <div class="box-body txt-sm">
+            \(\eta = 4\ln 2 \approx 2.773 &gt; e \approx 2.718\)<br>
+            ∴ \(\eta &gt; e\) → 교점 <strong>3개</strong><br>
+            \(\quad(1,\;2),\quad(1.457\ldots,\;1.457\ldots),\quad(2,\;1)\)
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 14  무한 지수탑 소개
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-14">
+  <div class="slide-header">
+    <span class="chapter-label">무한 지수탑</span>
+    <span class="page-num">14 / 18</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">무한 지수탑</h1>
+    <p class="slide-subtitle">\(\sqrt{2}\) 는 수렴, \(\sqrt{3}\) 은 발산</p>
+  </div>
+  <div class="content-zone top-260" style="gap:20px;">
+    <div class="cols" style="gap:50px; align-items:flex-start;">
+      <div class="col-5">
+        <div class="section-label">정의</div>
+        <div class="display-math-sm">\[ T = a^{a^{a^{\cdot^{\cdot^\cdot}}}} \]</div>
+        <div class="stability-row" style="margin-top:18px;">
+          <div class="stability-block stable">
+            <div class="sb-title">수렴</div>
+            <div style="font-size:30px;">
+              \(\sqrt{2}^{\sqrt{2}^{\sqrt{2}^{\cdots}}} = 2\)<br>
+              \(y = \sqrt{2}^x\) 가 \(y=x\) 와 교점 가짐
+            </div>
+          </div>
+          <div class="stability-block unstable" style="margin-left:0;">
+            <div class="sb-title">발산</div>
+            <div style="font-size:30px;">
+              \(\sqrt{3}^{\sqrt{3}^{\sqrt{3}^{\cdots}}}\) 발산<br>
+              \(y = \sqrt{3}^x\) 가 \(y=x\) 와 교점 없음
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="section-label">그래프: \(y = a^x\) vs \(y = x\)</div>
+        <div class="graph-wrap" style="gap:8px;">
+          <canvas id="canvas-tower" width="760" height="460"></canvas>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-line" style="background:#0066cc;"></div><span class="txt-sm">\(y=\sqrt{2}^x\) (수렴)</span></div>
+            <div class="legend-item"><div class="legend-line" style="background:#c0392b;"></div><span class="txt-sm">\(y=\sqrt{3}^x\) (발산)</span></div>
+            <div class="legend-item"><div class="legend-dash" style="border-color:#888;"></div><span class="txt-sm">\(y=x\)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 15  탑과 Lambert W
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-15">
+  <div class="slide-header">
+    <span class="chapter-label">무한 지수탑</span>
+    <span class="page-num">15 / 18</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">무한 지수탑과 Lambert \(W\) 함수</h1>
+  </div>
+  <div class="content-zone top-210" style="gap:30px;">
+    <div class="cols" style="gap:60px; align-items:flex-start;">
+      <div class="col">
+        <div class="section-label">극한값의 방정식</div>
+        <div style="font-size:34px; line-height:2.0;">
+          \(T = a^T\) (위쪽 꼬리도 \(T\))<br>
+          \(\Rightarrow -T\ln a = W(-\ln a)\)<br><br>
+          <span class="txt-bold">이 방정식은 앞서 구한</span><br>
+          고정점 조건 \(x_* = a^{x_*}\) 와 <strong>동일</strong>
+        </div>
+        <div class="display-math-sm" style="margin-top:14px;">
+          \[ T = -\frac{W(-\ln a)}{\ln a} \]
+        </div>
+      </div>
+      <div class="col">
+        <div class="section-label">수렴 범위</div>
+        <div class="display-math">\[ e^{-e} \leq a \leq e^{1/e} \]</div>
+        <div style="font-size:32px; line-height:1.85; margin-top:10px;">
+          \(e^{-e} \approx 0.0660,\quad e^{1/e} \approx 1.4447\)
+        </div>
+        <div class="box box-blue" style="margin-top:22px;">
+          <div class="box-body txt-sm">
+            수렴 조건: 고정점의 안정성 \(|f'(T)| = |T\ln a| &lt; 1\)<br>
+            \(\Leftrightarrow |W(-\ln a)| &lt; 1\) — Lambert \(W\) 로 직접 표현
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="box box-gray">
+      <div class="box-body txt-sm">
+        반복 \(x_{n+1} = a^{x_n}\) 으로 탑 값을 계산할 수 있으며, 수렴 구간 내에서 \(x_0\)부터 안정 고정점으로 수렴
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 16  경계의 연관성
+══════════════════════════════════════════════════════ -->
+<div class="slide slide-dark" id="slide-16">
+  <div class="slide-header">
+    <span class="chapter-label">연관성</span>
+    <span class="page-num">16 / 18</span>
+  </div>
+  <div class="title-zone" style="border-bottom-color: var(--c-accent-dk);">
+    <h1 class="slide-title">수렴 경계와 교점 경계의 일치</h1>
+    <p class="slide-subtitle" style="color:rgba(255,255,255,0.55);">같은 방정식, 세 가지 시점</p>
+  </div>
+  <div class="content-zone top-260" style="gap:32px;">
+    <div class="cols" style="gap:40px;">
+      <div class="col">
+        <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:28px 30px;">
+          <div style="font-size:28px; font-weight:600; color:var(--c-accent-dk); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em;">상한 \(e^{1/e}\)</div>
+          <div style="font-size:30px; line-height:1.8; color:#fff;">
+            교점: \(1 &lt; a &lt; e^{1/e}\) → 2개<br>
+            교점: \(a &gt; e^{1/e}\) → 0개<br>
+            무한탑: \(a \leq e^{1/e}\) 이면 수렴
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:28px 30px;">
+          <div style="font-size:28px; font-weight:600; color:var(--c-accent-dk); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em;">하한 \(e^{-e}\)</div>
+          <div style="font-size:30px; line-height:1.8; color:#fff;">
+            교점: \(a &lt; e^{-e}\) → 3개<br>
+            교점: \(e^{-e} \leq a &lt; 1\) → 1개<br>
+            무한탑: \(a \geq e^{-e}\) 이면 수렴
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="background:rgba(0,102,204,0.18); border:2px solid var(--c-accent-dk); border-radius:16px; padding:28px 40px; text-align:center;">
+      <div style="font-size:30px; color:rgba(255,255,255,0.7); margin-bottom:10px; font-weight:500;">공통 원인</div>
+      <div style="font-size:36px; color:#fff; font-weight:600; line-height:1.6;">
+        고정점 안정성 조건 \(\;|f'(x_*)| = |x_* \ln a| = |W(-\ln a)| = 1\)
+      </div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-node" style="font-size:28px; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.25); color:#fff;">교점 분류 경계<br><span style="font-size:22px; font-weight:400; color:rgba(255,255,255,0.6);">\(e^{-e},\; e^{1/e}\)</span></div>
+      <div class="flow-arrow" style="color:#fff;">⟺</div>
+      <div class="flow-node" style="font-size:28px; background:rgba(0,153,255,0.18); border:1px solid rgba(41,151,255,0.5); color:#fff;">Lambert \(W\) 가지<br><span style="font-size:22px; font-weight:400; color:rgba(255,255,255,0.6);">\(|W| = 1\) 지점</span></div>
+      <div class="flow-arrow" style="color:#fff;">⟺</div>
+      <div class="flow-node" style="font-size:28px; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.25); color:#fff;">무한탑 수렴<br><span style="font-size:22px; font-weight:400; color:rgba(255,255,255,0.6);">하·상한 경계</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 17  요약
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-17">
+  <div class="slide-header">
+    <span class="chapter-label">요약</span>
+    <span class="page-num">17 / 18</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">요약</h1>
+    <p class="slide-subtitle">고정점 방정식 \(x = a^x\) 의 세 가지 해석</p>
+  </div>
+  <div class="content-zone top-260" style="gap:32px; justify-content:center;">
+    <div class="flow-row" style="gap:10px;">
+      <div class="flow-node accent" style="min-width:0; padding:20px 24px; text-align:center; font-size:30px;">
+        \(y=a^x\) &amp; \(x=a^y\)<br>교점 문제
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="min-width:0; padding:20px 24px; text-align:center; font-size:30px;">
+        \(f^2(x)=x\)<br>고정점 / 2주기점
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node accent" style="min-width:0; padding:20px 24px; text-align:center; font-size:30px;">
+        Lambert \(W\)<br>명시적 표현
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="min-width:0; padding:20px 24px; text-align:center; font-size:30px;">
+        무한지수탑<br>수렴 극한
+      </div>
+    </div>
+    <table class="class-table">
+      <thead>
+        <tr>
+          <th>주제</th>
+          <th>핵심 경계</th>
+          <th>Lambert \(W\) 역할</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>교점 개수 (원래 문제)</td>
+          <td>\(e^{-e}\) 와 \(e^{1/e}\)</td>
+          <td>대각선 위 해 \(x_* = -W(-\ln a)/\ln a\)</td>
+        </tr>
+        <tr>
+          <td>교점 개수 (일반화)</td>
+          <td>\(\eta = e\) (감소형), \(\eta = -1/e\) (증가형)</td>
+          <td>\(x_* = b - W_j(\eta)/\ln a\)</td>
+        </tr>
+        <tr>
+          <td>무한 지수탑</td>
+          <td>\(e^{-e} \leq a \leq e^{1/e}\)</td>
+          <td>극한값 \(T = -W(-\ln a)/\ln a\)</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="box box-blue txt-center">
+      <div class="box-body">
+        세 주제는 하나의 고정점 방정식 \(x = a^x\) 를 서로 다른 관점으로 바라본 결과
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 18  마무리
+══════════════════════════════════════════════════════ -->
+<div class="slide slide-outro" id="slide-18">
+  <div class="outro-inner">
+    <div class="outro-main">감사합니다</div>
+    <div class="outro-sub">질문 환영</div>
+  </div>
+  <div class="cover-line"></div>
+</div>
+
+</div><!-- #slide-viewport -->
+
+<!-- ─── Navigation Bar ──────────────────────────────── -->
+<div id="nav-bar">
+  <button id="btn-prev" disabled>&#8592;</button>
+  <span id="slide-counter">1 / 18</span>
+  <button id="btn-next">&#8594;</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script src="slide.js"></script>
+</body>
+</html>
