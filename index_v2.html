@@ -94,8 +94,8 @@
       <span class="slider-value" id="a-value">\(1.200\)</span>
     </div>
     <div class="special-point-row" aria-label="tangent point selection">
-      <button type="button" class="special-point-btn" data-special-a="lower">tangent pt. \((1/e,\,1/e)\)</button>
-      <button type="button" class="special-point-btn" data-special-a="upper">tangent pt. \((e,\,e)\)</button>
+      <button type="button" class="special-point-btn" data-special-a="lower">접점 \((1/e,\,1/e)\)</button>
+      <button type="button" class="special-point-btn" data-special-a="upper">접점 \((e,\,e)\)</button>
     </div>
     <div class="intersect-info" id="intersect-info" style="position: relative; top: 20px">#intersections: <strong id="intersect-count">—</strong></div>
   </div>
@@ -204,7 +204,7 @@
           <td>\(a = e^{1/e}\)</td>
           <td>\(\eta = -1/e\)</td>
           <td class="cnt">1</td>
-          <td>tangent pt. on \(y=x\)</td>
+          <td>접점 on \(y=x\)</td>
         </tr>
         <tr>
           <td>\(a &gt; e^{1/e}\)</td>
@@ -463,7 +463,7 @@
     </div>
     <div class="box box-blue" style="padding:16px 36px;">
       <div class="box-body txt-md txt-center">
-        \(\eta \gtrless e \;\Leftrightarrow\; a \gtrless e^{-e}\)
+        \(\eta \gtrless e \;\Leftrightarrow\; a \lessgtr e^{-e}\)
         &emsp;boundary: \(\;\boxed{a = e^{-e}}\;\;(\eta = e)\)
       </div>
     </div>
@@ -746,7 +746,7 @@
             <tr>
               <td>\(\eta = -1/e\)</td>
               <td class="cnt">1</td>
-              <td>tangent pt.</td>
+              <td>접점</td>
             </tr>
             <tr>
               <td>\(\eta &lt; -1/e\)</td>
@@ -920,7 +920,7 @@
     </div>
     <div class="box box-gray">
       <div class="box-body txt-sm">
-        \(x_{n+1} = a^{x_n},\quad x_0 \in [e^{-e},\, e^{1/e}] \;\Rightarrow\; x_n \to T\)
+        \(x_{n+1} = a^{x_n},\quad a \in [e^{-e},\, e^{1/e}] \;\Rightarrow\; x_n \to T\)
       </div>
     </div>
   </div>
