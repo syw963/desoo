@@ -3,7 +3,7 @@
 // ════════════════════════════════════════════════════════
 //  STATE & NAVIGATION
 // ════════════════════════════════════════════════════════
-const TOTAL = 22;
+const TOTAL = 19;
 let current = 1;
 
 function showSlide(n) {
@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Draw all graphs after math rendering
   requestAnimationFrame(() => {
+    drawSlide3Graph();
     drawHxGraph();
     drawLambertWGraph();
     drawTowerGraph();
@@ -252,6 +253,96 @@ function findZeros(f, xMin, xMax, steps = 3000) {
     px = x; pf = fx;
   }
   return zeros;
+}
+
+// ════════════════════════════════════════════════════════
+//  SLIDE 3 — Four piecewise functions f(x), g(x)
+// ════════════════════════════════════════════════════════
+function drawSlide3Graph() {
+  // Find k ∈ (-2,-1): continuity requires 2^(-(k+2)) = -log₂(k+2)
+  // Let t = k+2 ∈ (0,1): solve 2^(-t) = log₂(1/t) by bisection
+  let lo = 0.01, hi = 0.99;
+  for (let i = 0; i < 80; i++) {
+    const m = (lo + hi) / 2;
+    (Math.pow(2, -m) - Math.log2(1 / m) > 0) ? (hi = m) : (lo = m);
+  }
+  const K  = (lo + hi) / 2 - 2;  // ≈ −1.358
+  const NK = -K;                   // ≈ +1.358
+
+  const g = new Graph('canvas-slide3', { xMin: -6.5, xMax: 6.5, yMin: -6.5, yMax: 6.5 });
+  if (!g.canvas) return;
+
+  g.clear('#fafafa');
+  g.drawGrid(1, 1);
+  g.drawAxes('#bbb');
+
+  const BLUE      = '#0066cc';
+  const RED       = '#c0392b';
+  const BLUE_DASH = 'rgba(0,102,204,0.42)';
+  const RED_DASH  = 'rgba(192,57,43,0.42)';
+
+  // f₁(x) = 2^(−x−2) − 2
+  const f1 = x => Math.pow(2, -x - 2) - 2;
+  // f₂(x) = −log₂(x+2) − 2  [x > −2]
+  const f2 = x => x > -2 ? -Math.log2(x + 2) - 2 : NaN;
+  // g₁(x) = log₂(2−x) + 2   [x < 2]
+  const g1 = x => x < 2 ? Math.log2(2 - x) + 2 : NaN;
+  // g₂(x) = −2^(x−2) + 2
+  const g2 = x => -Math.pow(2, x - 2) + 2;
+
+  // Dashed: outside piecewise domain
+  g.drawDash(x => x >= K            ? f1(x) : NaN, BLUE_DASH, 2.5);
+  g.drawDash(x => x < K && x > -2  ? f2(x) : NaN, BLUE_DASH, 2.5);
+  g.drawDash(x => x >= NK && x < 2 ? g1(x) : NaN, RED_DASH,  2.5);
+  g.drawDash(x => x < NK           ? g2(x) : NaN, RED_DASH,  2.5);
+
+  // Solid: within piecewise domain
+  g.drawCurve(x => x < K  ? f1(x) : NaN, BLUE, 3.5);
+  g.drawCurve(x => x >= K ? f2(x) : NaN, BLUE, 3.5);
+  g.drawCurve(x => x < NK ? g1(x) : NaN, RED,  3.5);
+  g.drawCurve(x => x >= NK ? g2(x) : NaN, RED, 3.5);
+
+  const { ctx } = g;
+
+  // Vertical guide lines at x = K and x = NK
+  ctx.save();
+  ctx.setLineDash([7, 5]);
+  ctx.beginPath();
+  ctx.strokeStyle = '#d0d0d4';
+  ctx.lineWidth = 1;
+  ctx.moveTo(g.wx(K),  0); ctx.lineTo(g.wx(K),  g.H);
+  ctx.moveTo(g.wx(NK), 0); ctx.lineTo(g.wx(NK), g.H);
+  ctx.stroke();
+  ctx.restore();
+
+  // Integer tick labels (skip ±1 — too close to k labels)
+  ctx.save();
+  ctx.fillStyle = '#aaa';
+  ctx.font = '18px "IBM Plex Sans",sans-serif';
+  ctx.textAlign = 'center';
+  [-6, -5, -4, -3, -2, 2, 3, 4, 5, 6].forEach(v => {
+    ctx.fillText(v, g.wx(v), g.wy(0) + 24);
+  });
+  ctx.textAlign = 'right';
+  [-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6].forEach(v => {
+    ctx.fillText(v, g.wx(0) - 7, g.wy(v) + 6);
+  });
+  ctx.restore();
+
+  // k and −k labels + small tick marks
+  ctx.save();
+  ctx.beginPath();
+  ctx.strokeStyle = '#888';
+  ctx.lineWidth = 1.5;
+  ctx.moveTo(g.wx(K),  g.wy(0) - 6); ctx.lineTo(g.wx(K),  g.wy(0) + 6);
+  ctx.moveTo(g.wx(NK), g.wy(0) - 6); ctx.lineTo(g.wx(NK), g.wy(0) + 6);
+  ctx.stroke();
+  ctx.fillStyle = '#555';
+  ctx.font = '20px "IBM Plex Sans KR","IBM Plex Sans",sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('k',  g.wx(K),  g.wy(0) + 26);
+  ctx.fillText('−k', g.wx(NK), g.wy(0) + 26);
+  ctx.restore();
 }
 
 // ════════════════════════════════════════════════════════
