@@ -31,7 +31,7 @@
 <div class="slide" id="slide-2">
   <div class="slide-header">
     <span class="chapter-label">목차</span>
-    <span class="page-num">2 / 19</span>
+    <span class="page-num">2 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">목차</h1>
@@ -54,7 +54,7 @@
 <div class="slide" id="slide-3">
   <div class="slide-header">
     <span class="chapter-label">Motivation</span>
-    <span class="page-num">3 / 19</span>
+    <span class="page-num">3 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">탐구 동기가 된 문제</h1>
@@ -83,7 +83,7 @@
 <div class="slide" id="slide-4">
   <div class="slide-header">
     <span class="chapter-label">Basic Problem</span>
-    <span class="page-num">4 / 19</span>
+    <span class="page-num">4 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">\(y=a^x\)와 \(x=a^y\)의 교점</h1>
@@ -93,7 +93,7 @@
       <canvas id="canvas-slide4" width="1200" height="500"></canvas>
       <div class="legend">
         <div class="legend-item"><div class="legend-line" style="background:#0066cc;"></div><span class="txt-sm">\(y = a^x\)</span></div>
-        <div class="legend-item"><div class="legend-line" style="background:#c0392b;"></div><span class="txt-sm">\(y = \log_a x\)</span></div>
+        <div class="legend-item"><div class="legend-line" style="background:#c0392b;"></div><span class="txt-sm">\(x = a^y\)</span></div>
         <div class="legend-item"><div class="legend-dash" style="border-color:#888;"></div><span class="txt-sm">\(y = x\)</span></div>
         <div class="legend-item" style="margin-left:24px;"><div style="width:18px;height:18px;background:#0066cc;border-radius:50%;"></div><span class="txt-sm" style="margin-left:8px;">교점</span></div>
       </div>
@@ -117,7 +117,7 @@
 <div class="slide" id="slide-5">
   <div class="slide-header">
     <span class="chapter-label">Basic Problem</span>
-    <span class="page-num">5 / 19</span>
+    <span class="page-num">5 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">함수와 역함수의 교점 구조</h1>
@@ -152,8 +152,8 @@
         <div class="box box-gray" style="margin-top:20px;">
           <div class="box-title" style="color:#3a3a3c;">Classification Rule</div>
           <div class="box-body txt-sm">
-            incr. \(f\) → off-diagonal: <strong>impossible</strong><br>
-            decr. \(f\) → off-diagonal: <strong>possible</strong>
+            incr. \(f\) → off \(y=x\): <strong>impossible</strong><br>
+            decr. \(f\) → off \(y=x\): <strong>possible</strong>
           </div>
         </div>
       </div>
@@ -167,7 +167,7 @@
 <div class="slide" id="slide-6">
   <div class="slide-header">
     <span class="chapter-label">Basic Problem</span>
-    <span class="page-num">6 / 19</span>
+    <span class="page-num">6 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">증가함수 (\(a &gt; 1\)) 교점 분류</h1>
@@ -233,7 +233,7 @@
 <div class="slide" id="slide-7">
   <div class="slide-header">
     <span class="chapter-label">Basic Problem</span>
-    <span class="page-num">7 / 19</span>
+    <span class="page-num">7 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">감소함수 (\(0 &lt; a &lt; 1\)) 교점 분류</h1>
@@ -245,7 +245,7 @@
         <div style="font-size:34px; line-height:2.8; margin-top:20px;">
           on \(y=x\) \(\;\Leftrightarrow\;\) fixed pt. of \(f\) (always 1)<br>
           off \(y=x\) \(\;\Leftrightarrow\;\) 2-cycle pair of \(f\)<br>
-          2-cycle exists \(\;\Leftrightarrow\;\) \(|f'(x_*)| > 1\)
+          2-cycle exists \(\;\Leftrightarrow\;\) \(f'(x_*) < -1\)
         </div>
       </div>
       <div class="col">
@@ -257,7 +257,7 @@
         </div>
         <div class="box box-blue" style="margin-top:24px;">
           <div class="box-body" style="font-size:30px; text-align:center;">
-            \(|f'(x_*)| \gtrless 1 \;\Leftrightarrow\; a \lessgtr e^{-e}\)
+            \(f'(x_*) \lessgtr -1 \;\Leftrightarrow\; a \lessgtr e^{-e}\)
           </div>
         </div>
       </div>
@@ -274,12 +274,12 @@
         <tr>
           <td>\(0 &lt; a &lt; e^{-e}\)</td>
           <td class="cnt-red">3</td>
-          <td>fixed pt. 1 + 2-cycle pair</td>
+          <td>1 fixed pt. & 2-cycle pair</td>
         </tr>
         <tr>
           <td>\(e^{-e} \leq a &lt; 1\)</td>
           <td class="cnt">1</td>
-          <td>fixed pt. 1 only</td>
+          <td>1 fixed pt.</td>
         </tr>
       </tbody>
     </table>
@@ -287,12 +287,67 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════════
-     SLIDE 8  Lambert W 소개
+     SLIDE 8  일반화 문제 제시
 ══════════════════════════════════════════════════════ -->
 <div class="slide" id="slide-8">
   <div class="slide-header">
     <span class="chapter-label">Lambert W</span>
-    <span class="page-num">8 / 19</span>
+    <span class="page-num">8 / 20</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">일반화: \(f(x)=ka^x+b\) 의 교점</h1>
+    <p class="slide-subtitle">기존 방법은 왜 막히는가?</p>
+  </div>
+  <div class="content-zone top-260" style="gap:28px;">
+    <div class="cols" style="align-items:flex-start; gap:56px;">
+      <div class="col">
+        <div class="section-label">자연스러운 다음 질문</div>
+        <div style="font-size:32px; line-height:2.1; margin-top:16px;">
+          \(f(x) = ka^x + b \quad (k \neq 0)\)<br>
+          \(f(x)\)와 \(f^{-1}(x)\)의 교점 구조?
+        </div>
+        <div class="section-label" style="margin-top:28px;">고정점 방정식</div>
+        <div style="font-size:32px; line-height:2.1; margin-top:16px;">
+          \(f(x) = x \;\Longrightarrow\; ka^x = x - b\)
+        </div>
+        <div class="box box-red" style="margin-top:20px;">
+          <div class="box-body txt-sm">
+            양변에 \(x\)가 지수와 일반항으로 동시에 등장<br>
+            초등적 방법으로 closed-form 해 없음
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="section-label">기본 문제 방법과 비교</div>
+        <div style="font-size:30px; line-height:1.9; margin-top:16px;">
+          <span style="color:#0066cc; font-weight:600;">기본</span>: \(\;a^x = x \;\Leftrightarrow\; \dfrac{\ln x}{x} = \ln a\)
+        </div>
+        <div style="font-size:26px; line-height:1.6; margin-top:4px; padding-left:8px; color:#555;">
+          \(\Rightarrow\) \(h(x)=\dfrac{\ln x}{x}\) 의 최댓값 \(\tfrac{1}{e}\) 과 비교만 하면 충분
+        </div>
+        <div style="font-size:30px; line-height:1.9; margin-top:22px;">
+          <span style="color:#c0392b; font-weight:600;">일반화</span>: \(\;ka^x = x-b \;\Leftrightarrow\; \dfrac{\ln(x-b)-\ln k}{x} = \ln a\)
+        </div>
+        <div style="font-size:26px; line-height:1.6; margin-top:4px; padding-left:8px; color:#555;">
+          \(\Rightarrow\) 우변도 \(x\)에 의존 — 최댓값이 \(k,b\)에 종속되어 같은 방법 불가
+        </div>
+      </div>
+    </div>
+    <div class="box box-blue" style="padding:18px 36px; text-align:center;">
+      <div class="box-body txt-md">
+        고정점의 존재·개수·좌표를 통일된 방법으로 분류하려면 — <strong>Lambert \(W\) 함수</strong>가 필요
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SLIDE 9  Lambert W 소개
+══════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-9">
+  <div class="slide-header">
+    <span class="chapter-label">Lambert W</span>
+    <span class="page-num">9 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">Lambert \(W\) 함수</h1>
@@ -335,10 +390,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 9  Lambert W 적용 — 고정점 유도
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-9">
+<div class="slide" id="slide-10">
   <div class="slide-header">
     <span class="chapter-label">Lambert W</span>
-    <span class="page-num">9 / 19</span>
+    <span class="page-num">10 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">\(a^x = x\) — Lambert \(W\) 형태로 정리</h1>
@@ -375,10 +430,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 10  감소형 h(x)=0 reduction
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-10">
+<div class="slide" id="slide-11">
   <div class="slide-header">
     <span class="chapter-label">Lambert W</span>
-    <span class="page-num">10 / 19</span>
+    <span class="page-num">11 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">감소형 — \(h(x)=0\) 변환</h1>
@@ -420,10 +475,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 11  감소형 경우 분류
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-11">
+<div class="slide" id="slide-12">
   <div class="slide-header">
     <span class="chapter-label">Lambert W</span>
-    <span class="page-num">11 / 19</span>
+    <span class="page-num">12 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">경우 분류 — \(h=0\) 의 근 개수</h1>
@@ -483,10 +538,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 12  local max/min 부호 증명
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-12">
+<div class="slide" id="slide-13">
   <div class="slide-header">
     <span class="chapter-label">Lambert W</span>
-    <span class="page-num">12 / 19</span>
+    <span class="page-num">13 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">극대 \(> 0\), 극소 \(< 0\) 증명</h1>
@@ -535,10 +590,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 13  Lambert W로 교점 완전 분류
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-13">
+<div class="slide" id="slide-14">
   <div class="slide-header">
     <span class="chapter-label">Lambert W</span>
-    <span class="page-num">13 / 19</span>
+    <span class="page-num">14 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">\(y=a^x,\; x=a^y\) — Lambert \(W\)로 완전 분류</h1>
@@ -616,10 +671,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 10  일반화 소개
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-14">
+<div class="slide" id="slide-15">
   <div class="slide-header">
     <span class="chapter-label">Generalization</span>
-    <span class="page-num">14 / 19</span>
+    <span class="page-num">15 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">일반화된 \(f(x)=ka^x+b\) 교점 분류</h1>
@@ -680,10 +735,10 @@
   </div>
 </div>
 
-<div class="slide" id="slide-15">
+<div class="slide" id="slide-16">
   <div class="slide-header">
     <span class="chapter-label">Infinite Tower</span>
-    <span class="page-num">15 / 19</span>
+    <span class="page-num">16 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">무한 지수탑</h1>
@@ -729,10 +784,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 15  탑과 Lambert W
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-16">
+<div class="slide" id="slide-17">
   <div class="slide-header">
     <span class="chapter-label">Infinite Tower</span>
-    <span class="page-num">16 / 19</span>
+    <span class="page-num">17 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">무한 지수탑과 Lambert \(W\) 함수</h1>
@@ -775,10 +830,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 16  경계의 연관성
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-17">
+<div class="slide" id="slide-18">
   <div class="slide-header">
     <span class="chapter-label">Connection</span>
-    <span class="page-num">17 / 19</span>
+    <span class="page-num">18 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">수렴 경계와 교점 경계의 일치</h1>
@@ -826,10 +881,10 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 17  요약
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-18">
+<div class="slide" id="slide-19">
   <div class="slide-header">
     <span class="chapter-label">Summary</span>
-    <span class="page-num">18 / 19</span>
+    <span class="page-num">19 / 20</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">요약</h1>
@@ -890,7 +945,7 @@
 <!-- ══════════════════════════════════════════════════════
      SLIDE 18  마무리
 ══════════════════════════════════════════════════════ -->
-<div class="slide slide-outro" id="slide-19">
+<div class="slide slide-outro" id="slide-20">
   <div class="outro-inner">
     <div class="outro-main">감사합니다</div>
   </div>
@@ -902,7 +957,7 @@
 <!-- ─── Navigation Bar ──────────────────────────────── -->
 <div id="nav-bar">
   <button id="btn-prev" disabled>&#8592;</button>
-  <span id="slide-counter">1 / 19</span>
+  <span id="slide-counter">1 / 20</span>
   <button id="btn-next">&#8594;</button>
 </div>
 
