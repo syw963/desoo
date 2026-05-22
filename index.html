@@ -241,19 +241,19 @@
         <div style="font-size:34px; line-height:2.8; margin-top:20px;">
           on \(y=x\) \(\;\Leftrightarrow\;\) fixed pt. of \(f\) (always 1)<br>
           off \(y=x\) \(\;\Leftrightarrow\;\) 2-cycle pair of \(f\)<br>
-          2-cycle exists \(\;\Leftrightarrow\;\) \(f'(x_*) < -1\)
+          2-cycle exists \(\;\Leftrightarrow\;\) \(f'(x^*) < -1\)
         </div>
       </div>
       <div class="col">
         <div class="section-label">Boundary \(a = e^{-e}\) Derivation</div>
         <div style="font-size:34px; line-height:2.8; margin-top:20px;">
-          fixed pt.: \(a^{x_*} = x_* \;\Rightarrow\; x_* \ln a = \ln x_*\)<br>
-          boundary: \(f'(x_*) = \ln a \cdot x_* = -1\)<br>
-          solve: \(\ln x_* = -1 \;\Rightarrow\; x_* = \tfrac{1}{e},\;\; \boxed{a = e^{-e}}\)
+          fixed pt.: \(a^{x^*} = x^* \;\Rightarrow\; x^* \ln a = \ln x^*\)<br>
+          boundary: \(f'(x^*) = \ln a \cdot x^* = -1\)<br>
+          solve: \(\ln x^* = -1 \;\Rightarrow\; x^* = \tfrac{1}{e},\;\; \boxed{a = e^{-e}}\)
         </div>
         <div class="box box-blue" style="margin-top:24px;">
           <div class="box-body" style="font-size:30px; text-align:center;">
-            \(f'(x_*) \lessgtr -1 \;\Leftrightarrow\; a \lessgtr e^{-e}\)
+            \(f'(x^*) \lessgtr -1 \;\Leftrightarrow\; a \lessgtr e^{-e}\)
           </div>
         </div>
       </div>
@@ -394,7 +394,8 @@
       <div class="box box-blue" style="padding:28px 36px; flex:1;">
         <div class="box-body" style="font-size:32px; line-height:2.6; text-align:center;">
           \(a^x = x \;\Rightarrow\; e^{-x\eta} = x \quad (\eta = -\ln a)\)<br>
-          \(\xRightarrow\; 1 = x e^{x\eta} \;\Rightarrow\; x\eta e^{x\eta} = \eta \;\Rightarrow\; \boxed{\,x_* = \dfrac{W(\eta)}{\eta}\,}\)
+          \(\Rightarrow\; 1 = x e^{x\eta} \;\Rightarrow\; x\eta e^{x\eta} = \eta\)<br>
+          \(\Rightarrow\; x\eta = W(\eta) \;\Rightarrow\; \boxed{\,x^* = \dfrac{W(\eta)}{\eta}\,}\)
         </div>
       </div>
       <div class="box box-gray" style="padding:22px 28px; flex:0 0 320px;">
@@ -443,11 +444,10 @@
       <div class="col">
         <div class="section-label">Substitution</div>
         <div style="font-size:32px; line-height:2.5; margin-top:20px;">
-          \(a^x = e^{-\eta x},\quad \ln a = -\eta\)<br>
-          \(x = a^{a^x}\) (2-cycle)<br>
+          \(\begin{cases} y = a^x \\ x = a^y \end{cases} \Rightarrow x = a^{a^x}\)<br>
           \(\Rightarrow\; \ln x = a^x \cdot \ln a\)<br>
-          \(\phantom{\Rightarrow\; \ln x\,} = e^{-\eta x} \cdot (-\eta)\)<br>
-          \(\phantom{\Rightarrow\; \ln x\,} = -\eta e^{-\eta x}\)
+          \(\phantom{\Rightarrow\; \ln x\,} = a^x \cdot (-\eta) \quad (\because \ln a = -\eta)\)<br>
+          \(\phantom{\Rightarrow\; \ln x\,} = -\eta e^{-\eta x} \quad (\because a^x = e^{-\eta x})\)
         </div>
         <div class="box box-blue" style="margin-top:20px;">
           <div class="box-body txt-sm">
@@ -483,9 +483,16 @@
   </div>
   <div class="title-zone">
     <h1 class="slide-title">경우 분류 — \(h=0\) 의 근 개수</h1>
-    <p class="slide-subtitle">\(h(x) = \ln x + \eta e^{-\eta x}, \qquad \eta = -\ln a\)</p>
+    <p class="slide-subtitle">\(h(x) = \ln x + \eta e^{-\eta x},\quad h'(x) = \dfrac{1}{x} - \eta^2 e^{-\eta x}, \quad \eta = -\ln a\)</p>
   </div>
-  <div class="content-zone" style="top:285px; gap:20px;">
+  <div class="content-zone" style="top:285px; gap:16px;">
+    <div class="box box-gray" style="padding:14px 32px;">
+      <div class="box-body" style="font-size:26px; text-align:center; line-height:1.8;">
+        critical pt.: \(\;x = -\dfrac{1}{\eta}\,W\!\left(-\dfrac{1}{\eta}\right)\)
+        &emsp;|&emsp;
+        real \(W\) exists \(\;\Leftrightarrow\; \eta \geq e\)
+      </div>
+    </div>
     <div class="cols" style="align-items:flex-start; gap:28px;">
       <div class="col">
         <div class="section-label">\(0 < \eta < e\;\;(e^{-e} < a < 1)\)</div>
@@ -602,7 +609,7 @@
   <div class="content-zone top-210" style="gap:26px;">
     <div class="box box-blue" style="padding:20px 36px;">
       <div class="box-body txt-md txt-center">
-        on \(y=x\): \(\quad x_* = \dfrac{W(\eta)}{\eta}\) \(\quad\) (\(\eta = -\ln a\))
+        on \(y=x\): \(\quad x^* = \dfrac{W(\eta)}{\eta}\) \(\quad\) (\(\eta = -\ln a\))
       </div>
     </div>
     <div class="slide9-layout">
@@ -663,7 +670,7 @@
     </div>
     <div class="box box-gray">
       <div class="box-body txt-sm">
-        \(e^{-e} \approx 0.0660,\quad e^{1/e} \approx 1.4447\) — both from \(|f'(x_*)| = 1\)
+        \(e^{-e} \approx 0.0660,\quad e^{1/e} \approx 1.4447\) — both from \(|f'(x^*)| = 1\)
       </div>
     </div>
   </div>
@@ -685,7 +692,7 @@
       <div class="box-body" style="font-size:32px; text-align:center; line-height:2.2;">
         \(\eta := -ka^b\ln a\)
         &emsp;&emsp;
-        \(x_* = b - \dfrac{W_j(\eta)}{\ln a}\)
+        \(x^* = b - \dfrac{W_j(\eta)}{\ln a}\)
       </div>
     </div>
     <table class="class-table">
@@ -800,7 +807,7 @@
         <div style="font-size:34px; line-height:2.0;">
           \(T = a^T\) (self-similar)<br>
           \(\Rightarrow -T\ln a = W(-\ln a)\)<br><br>
-          \(\equiv\) fixed-point condition \(x_* = a^{x_*}\)
+          \(\equiv\) fixed-point condition \(x^* = a^{x^*}\)
         </div>
         <div class="display-math-sm" style="margin-top:14px;">
           \[ T = -\frac{W(-\ln a)}{\ln a} \]
@@ -834,119 +841,50 @@
 <div class="slide" id="slide-18">
   <div class="slide-header">
     <span class="chapter-label">Connection</span>
-    <span class="page-num">18 / 20</span>
+    <span class="page-num">18 / 19</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">수렴 경계와 교점 경계의 일치</h1>
-    <p class="slide-subtitle">One Equation, Three Perspectives</p>
+    <p class="slide-subtitle">same origin</p>
   </div>
-  <div class="content-zone top-260" style="gap:32px;">
-    <div class="cols" style="gap:40px;">
-      <div class="col">
-        <div class="box box-blue" style="padding:28px 30px;">
-          <div class="box-title">upper bound \(e^{1/e}\)</div>
-          <div class="box-body txt-sm">
-            intersections: \(1 &lt; a &lt; e^{1/e}\) → 2<br>
-            intersections: \(a &gt; e^{1/e}\) → 0<br>
-            Tower: \(a \leq e^{1/e} \Rightarrow\) 수렴
-          </div>
-        </div>
+  <div class="content-zone top-260" style="gap:44px;">
+
+    <!-- Connection -->
+    <div class="flow-row" style="gap:32px;">
+      <div class="flow-node accent" style="font-size:30px; padding:44px 72px; text-align:center; line-height:1.7;">
+        intersection boundary<br>
+        <span style="font-size:50px; font-weight:700;">\(e^{-e},\quad e^{1/e}\)</span>
       </div>
-      <div class="col">
-        <div class="box box-blue" style="padding:28px 30px;">
-          <div class="box-title">lower bound \(e^{-e}\)</div>
-          <div class="box-body txt-sm">
-            intersections: \(a &lt; e^{-e}\) → 3<br>
-            intersections: \(e^{-e} \leq a &lt; 1\) → 1<br>
-            Tower: \(a \geq e^{-e} \Rightarrow\) 수렴
-          </div>
-        </div>
+      <div class="flow-arrow" style="font-size:54px;">⟺</div>
+      <div class="flow-node accent" style="font-size:30px; padding:44px 72px; text-align:center; line-height:1.7;">
+        Tower convergence<br>
+        <span style="font-size:50px; font-weight:700;">\(e^{-e} \leq a \leq e^{1/e}\)</span>
       </div>
     </div>
-    <div class="box box-gray" style="padding:28px 40px; text-align:center;">
-      <div class="box-title" style="color:#3a3a3c;">Common Origin</div>
-      <div class="box-body txt-md txt-bold">
-        fixed-pt. stability: \(\;|f'(x_*)| = |x_* \ln a| = |W(-\ln a)| = 1\)
+
+    <!-- Common Origin derivation -->
+    <div class="box box-gray" style="padding:44px 60px;">
+      <div class="box-title" style="color:#3a3a3c;">Common Origin — fixed-pt. stability boundary</div>
+      <div class="box-body txt-sm txt-muted" style="margin-bottom:16px;">
+        recall: \(\;W(c\,e^c) = c \;\Longleftrightarrow\; W_0(t) = c \;\Rightarrow\; t = c\,e^c\)
+      </div>
+      <div class="box-body" style="font-size:33px; line-height:2.5;">
+        \(\bigl|f'(x^*)\bigr| = \bigl|{-W_0(-\ln a)}\bigr| = 1
+          \;\Longleftrightarrow\; W_0(-\ln a) = \pm1\)<br>
+        \(W_0 = \phantom{-}1 \;:\quad {-\ln a} = 1\cdot e^1 = e
+          \;\Rightarrow\; \boxed{\,a = e^{-e}\,}\)<br>
+        \(W_0 = -1 \;:\quad {-\ln a} = (-1)\cdot e^{-1} = -\tfrac{1}{e}
+          \;\Rightarrow\; \boxed{\,a = e^{1/e}\,}\)
       </div>
     </div>
-    <div class="flow-row">
-      <div class="flow-node" style="font-size:28px;">classification boundary<br><span class="txt-muted" style="font-size:22px; font-weight:400;">\(e^{-e},\; e^{1/e}\)</span></div>
-      <div class="flow-arrow">⟺</div>
-      <div class="flow-node accent" style="font-size:28px;">Lambert \(W\) branches<br><span style="font-size:22px; font-weight:400;">at \(|W| = 1\)</span></div>
-      <div class="flow-arrow">⟺</div>
-      <div class="flow-node" style="font-size:28px;">Tower Convergence<br><span class="txt-muted" style="font-size:22px; font-weight:400;">lower/upper bound</span></div>
-    </div>
+
   </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════
-     SLIDE 17  요약
+     SLIDE 19  마무리
 ══════════════════════════════════════════════════════ -->
-<div class="slide" id="slide-19">
-  <div class="slide-header">
-    <span class="chapter-label">Summary</span>
-    <span class="page-num">19 / 20</span>
-  </div>
-  <div class="title-zone">
-    <h1 class="slide-title">요약</h1>
-    <p class="slide-subtitle">Three Views on \(x = a^x\)</p>
-  </div>
-  <div class="content-zone top-260" style="gap:32px; justify-content:center;">
-    <div class="flow-row" style="gap:10px;">
-      <div class="flow-node accent" style="min-width:0; padding:20px 24px; text-align:center; font-size:30px;">
-        \(y=a^x\) &amp; \(x=a^y\)<br>Intersection
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="min-width:0; padding:20px 24px; text-align:center; font-size:30px;">
-        \(f^2(x)=x\)<br>fixed pt. / 2-cycle
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node accent" style="min-width:0; padding:20px 24px; text-align:center; font-size:30px;">
-        Lambert \(W\)<br>Closed Form
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-node" style="min-width:0; padding:20px 24px; text-align:center; font-size:30px;">
-        Infinite Tower<br>limit \(T\)
-      </div>
-    </div>
-    <table class="class-table">
-      <thead>
-        <tr>
-          <th>Topic</th>
-          <th>Critical Threshold</th>
-          <th>Lambert \(W\) Role</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>intersections (original)</td>
-          <td>\(e^{-e},\; e^{1/e}\)</td>
-          <td>fixed pt.: \(x_* = -W(-\ln a)/\ln a\)</td>
-        </tr>
-        <tr>
-          <td>intersections (generalized)</td>
-          <td>\(\eta = e\) (\(k\ln a &lt; 0\)), \(\eta = -1/e\) (\(k\ln a &gt; 0\))</td>
-          <td>\(x_* = b - W_j(\eta)/\ln a\)</td>
-        </tr>
-        <tr>
-          <td>Infinite Tower</td>
-          <td>\(e^{-e} \leq a \leq e^{1/e}\)</td>
-          <td>\(T = -W(-\ln a)/\ln a\)</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="box box-blue txt-center">
-      <div class="box-body">
-        All three topics are different perspectives on the fixed-point equation \(x = a^x\)
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════════
-     SLIDE 18  마무리
-══════════════════════════════════════════════════════ -->
-<div class="slide slide-outro" id="slide-20">
+<div class="slide slide-outro" id="slide-19">
   <div class="outro-inner">
     <div class="outro-main">감사합니다</div>
   </div>
