@@ -198,7 +198,6 @@
       <thead>
         <tr>
           <th>Range of \(a\)</th>
-          <th>\(-\ln a\) (\(=\eta\))</th>
           <th>Count</th>
           <th>Structure</th>
         </tr>
@@ -206,19 +205,16 @@
       <tbody>
         <tr>
           <td>\(1 &lt; a &lt; e^{1/e}\)</td>
-          <td>\(-1/e &lt; \eta &lt; 0\)</td>
           <td class="cnt">2</td>
           <td>2 on \(y=x\)</td>
         </tr>
         <tr>
           <td>\(a = e^{1/e}\)</td>
-          <td>\(\eta = -1/e\)</td>
           <td class="cnt">1</td>
           <td>tangent pt. on \(y=x\)</td>
         </tr>
         <tr>
           <td>\(a &gt; e^{1/e}\)</td>
-          <td>\(\eta &lt; -1/e\)</td>
           <td class="cnt">0</td>
           <td>none</td>
         </tr>
@@ -295,47 +291,41 @@
     <span class="page-num">8 / 20</span>
   </div>
   <div class="title-zone">
-    <h1 class="slide-title">일반화: \(f(x)=ka^x+b\) 의 교점</h1>
-    <p class="slide-subtitle">기존 방법은 왜 막히는가?</p>
+    <h1 class="slide-title">일반화: \(f(x)=ka^x+b\)</h1>
   </div>
-  <div class="content-zone top-260" style="gap:28px;">
+  <div class="content-zone" style="gap:32px;">
     <div class="cols" style="align-items:flex-start; gap:56px;">
       <div class="col">
-        <div class="section-label">자연스러운 다음 질문</div>
-        <div style="font-size:32px; line-height:2.1; margin-top:16px;">
-          \(f(x) = ka^x + b \quad (k \neq 0)\)<br>
-          \(f(x)\)와 \(f^{-1}(x)\)의 교점 구조?
+        <div class="section-label" style="color:#0066cc;">Basic</div>
+        <div style="font-size:34px; line-height:2.6; margin-top:24px;">
+          \(a^x = x\)<br>
+          \(\Leftrightarrow\; \dfrac{\ln x}{x} = \ln a\)
         </div>
-        <div class="section-label" style="margin-top:28px;">고정점 방정식</div>
-        <div style="font-size:32px; line-height:2.1; margin-top:16px;">
-          \(f(x) = x \;\Longrightarrow\; ka^x = x - b\)
+        <div style="font-size:28px; line-height:2.4; margin-top:28px;">
+          \(h(x)=\dfrac{\ln x}{x}\) has maximum<br>
+          \(h(e) = \dfrac{1}{e}\) — a constant
         </div>
-        <div class="box box-red" style="margin-top:20px;">
+        <div class="box box-blue" style="margin-top:36px;">
           <div class="box-body txt-sm">
-            양변에 \(x\)가 지수와 일반항으로 동시에 등장<br>
-            초등적 방법으로 closed-form 해 없음
+            compare \(\ln a\) with \(\dfrac{1}{e}\) — done
           </div>
         </div>
       </div>
       <div class="col">
-        <div class="section-label">기본 문제 방법과 비교</div>
-        <div style="font-size:30px; line-height:1.9; margin-top:16px;">
-          <span style="color:#0066cc; font-weight:600;">기본</span>: \(\;a^x = x \;\Leftrightarrow\; \dfrac{\ln x}{x} = \ln a\)
+        <div class="section-label" style="color:#c0392b;">Generalized</div>
+        <div style="font-size:34px; line-height:2.6; margin-top:24px;">
+          \(ka^x = x - b\)<br>
+          \(\Leftrightarrow\; \dfrac{\ln(x-b)-\ln k}{x} = \ln a\)
         </div>
-        <div style="font-size:26px; line-height:1.6; margin-top:4px; padding-left:8px; color:#555;">
-          \(\Rightarrow\) \(h(x)=\dfrac{\ln x}{x}\) 의 최댓값 \(\tfrac{1}{e}\) 과 비교만 하면 충분
+        <div style="font-size:28px; line-height:2.4; margin-top:28px;">
+          \(g(x)=\dfrac{\ln(x-b)-\ln k}{x}\) maximum<br>
+          depends on \(k,\,b\) — not constant
         </div>
-        <div style="font-size:30px; line-height:1.9; margin-top:22px;">
-          <span style="color:#c0392b; font-weight:600;">일반화</span>: \(\;ka^x = x-b \;\Leftrightarrow\; \dfrac{\ln(x-b)-\ln k}{x} = \ln a\)
+        <div class="box box-red" style="margin-top:36px;">
+          <div class="box-body txt-sm">
+            same method fails → <strong>Lambert \(W\)</strong> needed
+          </div>
         </div>
-        <div style="font-size:26px; line-height:1.6; margin-top:4px; padding-left:8px; color:#555;">
-          \(\Rightarrow\) 우변도 \(x\)에 의존 — 최댓값이 \(k,b\)에 종속되어 같은 방법 불가
-        </div>
-      </div>
-    </div>
-    <div class="box box-blue" style="padding:18px 36px; text-align:center;">
-      <div class="box-body txt-md">
-        고정점의 존재·개수·좌표를 통일된 방법으로 분류하려면 — <strong>Lambert \(W\) 함수</strong>가 필요
       </div>
     </div>
   </div>
@@ -351,7 +341,7 @@
   </div>
   <div class="title-zone">
     <h1 class="slide-title">Lambert \(W\) 함수</h1>
-    <p class="slide-subtitle">\(w \mapsto we^w\) 의 역함수</p>
+    <p class="slide-subtitle">\(x \mapsto xe^x\) 의 역함수</p>
   </div>
   <div class="content-zone top-260" style="gap:24px;">
     <div class="cols" style="align-items:flex-start; gap:56px;">
@@ -399,11 +389,19 @@
     <h1 class="slide-title">\(a^x = x\) — Lambert \(W\) 형태로 정리</h1>
     <p class="slide-subtitle">fixed-pt. derivation</p>
   </div>
-  <div class="content-zone" style="top:260px; gap:36px;">
-    <div class="box box-blue" style="padding:30px 40px;">
-      <div class="box-body" style="font-size:32px; line-height:2.6; text-align:center;">
-        \(a^x = x \;\Rightarrow\; e^{-x\eta} = x \quad (\eta = -\ln a)\)<br>
-        \(\xRightarrow{\;u\,=\,x\eta\;}\; ue^u = \eta \;\Rightarrow\; \boxed{\,x_* = \dfrac{W(\eta)}{\eta}\,}\)
+  <div class="content-zone" style="top:290px; gap:36px;">
+    <div style="display:flex; gap:36px; align-items:stretch;">
+      <div class="box box-blue" style="padding:28px 36px; flex:1;">
+        <div class="box-body" style="font-size:32px; line-height:2.6; text-align:center;">
+          \(a^x = x \;\Rightarrow\; e^{-x\eta} = x \quad (\eta = -\ln a)\)<br>
+          \(\xRightarrow\; 1 = x e^{x\eta} \;\Rightarrow\; x\eta e^{x\eta} = \eta \;\Rightarrow\; \boxed{\,x_* = \dfrac{W(\eta)}{\eta}\,}\)
+        </div>
+      </div>
+      <div class="box box-gray" style="padding:22px 28px; flex:0 0 320px;">
+        <div class="box-title">Lambert \(W\) recall</div>
+        <div class="box-body" style="font-size:30px; line-height:2.0; margin-top:8px;">
+          \(W(xe^x) = x\)
+        </div>
       </div>
     </div>
     <div class="cols" style="align-items:flex-start; gap:50px;">
@@ -417,10 +415,11 @@
       </div>
       <div class="col">
         <div class="section-label">decreasing \(\;(0 < a < 1,\;\eta > 0)\)</div>
-        <div style="font-size:32px; line-height:2.8; margin-top:18px;">
-          \(W_0(\eta) > 0\) always → <strong>1</strong> fixed pt. always<br>
-          \(|f'(x_*)| = W_0(\eta)\)<br>
-          \(W_0(\eta) > 1 \;\Leftrightarrow\; \eta > e \;\Leftrightarrow\; a < e^{-e}\) → 2-cycle
+        <div style="font-size:32px; line-height:2.4; margin-top:18px;">
+          \(W_0(\eta) > 0\) always → <strong>1</strong> fixed pt. always
+        </div>
+        <div style="font-size:26px; margin-top:20px; color:#888;">
+          2-cycle analysis → next slide
         </div>
       </div>
     </div>
@@ -443,12 +442,14 @@
     <div class="cols" style="align-items:flex-start; gap:56px;">
       <div class="col">
         <div class="section-label">Substitution</div>
-        <div style="font-size:34px; line-height:2.8; margin-top:20px;">
-          \(a = e^{-\eta} \;\Rightarrow\; a^x = e^{-\eta x}\)<br>
-          \(x = a^{a^x} \;\Rightarrow\; \ln x = a^x \ln a\)<br>
-          \(\phantom{\ln x\,} = -\eta e^{-\eta x}\)
+        <div style="font-size:32px; line-height:2.5; margin-top:20px;">
+          \(a^x = e^{-\eta x},\quad \ln a = -\eta\)<br>
+          \(x = a^{a^x}\) (2-cycle)<br>
+          \(\Rightarrow\; \ln x = a^x \cdot \ln a\)<br>
+          \(\phantom{\Rightarrow\; \ln x\,} = e^{-\eta x} \cdot (-\eta)\)<br>
+          \(\phantom{\Rightarrow\; \ln x\,} = -\eta e^{-\eta x}\)
         </div>
-        <div class="box box-blue" style="margin-top:28px;">
+        <div class="box box-blue" style="margin-top:20px;">
           <div class="box-body txt-sm">
             \(h(x) = \ln x + \eta e^{-\eta x}\)<br>
             zeros of \(h\) \(\;\Leftrightarrow\;\) solutions of \(x = a^{a^x}\)
@@ -541,7 +542,7 @@
 <div class="slide" id="slide-13">
   <div class="slide-header">
     <span class="chapter-label">Lambert W</span>
-    <span class="page-num">13 / 20</span>
+    <span class="page-num">13 / 20 *</span>
   </div>
   <div class="title-zone">
     <h1 class="slide-title">극대 \(> 0\), 극소 \(< 0\) 증명</h1>
