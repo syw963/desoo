@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     drawLambertWGraph();
     drawTowerGraph();
     initGraph4();
+    initGraph7();
     initGraph9();
   });
 });
@@ -600,6 +601,48 @@ function drawGraph4(a) {
   }
   if (infoElem) infoElem.innerHTML =
     `교점 개수: <strong>${intPts.length}개</strong>&emsp;<span style="color:#6e6e73;font-size:27px;">${note}</span>`;
+}
+
+// ════════════════════════════════════════════════════════
+//  SLIDE 7 — Small interactive graph  (0 < a < 1 only)
+// ════════════════════════════════════════════════════════
+const CANVAS_W7 = 680, CANVAS_H7 = 320;
+const ASPECT7   = CANVAS_W7 / CANVAS_H7;
+
+function initGraph7() {
+  const slider = document.getElementById('a-slider-7');
+  if (!slider) return;
+  slider.addEventListener('input', () => drawGraph7(+slider.value));
+  drawGraph7(+slider.value);
+}
+
+function drawGraph7(a) {
+  const lna = Math.log(a);
+  const eps = 1e-8;
+
+  const intPts = intersectionPointsForA(a);
+  const view   = autoView4(a, intPts, ASPECT7);
+  const g      = new Graph('canvas-slide7', view);
+  if (!g.canvas) return;
+
+  g.clear('#fafafa');
+  const unitStep = niceStep(Math.min(view.xMax - view.xMin, view.yMax - view.yMin));
+  g.drawGrid(unitStep, unitStep);
+  g.drawAxes('#ccc');
+  g.drawDash(x => x, '#bbb', 2);
+  g.drawCurve(x => Math.pow(a, x), '#0066cc', 3, 1000);
+  if (Math.abs(lna) > eps) {
+    drawPositiveCurveNearZero(g, x => Math.log(x) / lna, '#c0392b', 3, 1200);
+  }
+  intPts.forEach(p => g.dot(p.x, p.y, '#ff6b00', 8));
+  drawTicks4(g, unitStep);
+
+  const aElem    = document.getElementById('a-value-7');
+  const infoElem = document.getElementById('intersect-info-7');
+  if (aElem) aElem.textContent =
+    Math.abs(a - SPECIAL_A_LOWER4) < 1e-10 ? SPECIAL_A_LOWER4.toFixed(4) : a.toFixed(3);
+  if (infoElem) infoElem.innerHTML =
+    `교점: <strong>${intPts.length}개</strong>`;
 }
 
 function initGraph9() {
