@@ -1,339 +1,852 @@
 ## Overview
 
-Apple's web presence is a masterclass in **reverent product photography framed by near-invisible UI**. Every page is a stack of edge-to-edge product "tiles" — alternating light and dark canvases, each centered on a hero headline, a one-line tagline, two tiny blue pill CTAs, and an impossibly crisp product render. Nothing competes with the product. Typography is confident but quiet; color is either pure white, an off-white parchment, or a near-black tile; interactive elements are a single, quiet blue.
+This is an **Apple-inspired HTML presentation system** optimized for academic and mathematical content. The design language emphasizes restraint, clarity, and typographic discipline — a single blue accent, generous whitespace, and IBM Plex Sans throughout. Mathematical notation is rendered with KaTeX; interactive graphs use HTML5 Canvas.
 
-Density is unusually low even by contemporary SaaS standards. Each tile occupies roughly one viewport, and there is no decorative chrome — no borders, no gradients, no decorative frames, no shadows on headlines. Elevation appears only when a product image rests on a surface (a single soft `rgba(0, 0, 0, 0.22) 3px 5px 30px` drop for visual weight). The result is a catalog that feels more like a museum gallery: the wall disappears and the artifact takes over.
+**Key principles:**
+- Single accent color (`#0066cc`) for all interactive elements — never a second brand color.
+- IBM Plex Sans KR as the only text font; KaTeX Math only for equations.
+- Fixed 1920×1080 canvas scaled to fit any screen (no layout reflow).
+- No decorative gradients, no drop-shadows on UI (shadows only on canvas elements).
+- Consistent header / title-zone / content-zone across all standard slides.
 
-Store and shop surfaces retain the same chassis but switch modes. The product configurator (iPhone 17 Pro, accessories grid) introduces a tight grid of white utility cards at `{rounded.lg}` (18px) radius with a thin border, paired with a persistent thin sub-nav strip. The environment page leans darker and more editorial. Across all five surfaces the typographic system, spacing rhythm, and the single blue accent are consistent — this is one design language expressed at different volumes.
+---
 
-**Key Characteristics:**
-- Photography-first presentation; UI recedes so the product can speak.
-- Alternating full-bleed tile sections: white/parchment ↔ near-black, with the color change itself acting as the section divider.
-- Single blue accent (`{colors.primary}` — #0066cc) carries every interactive element. No second brand color exists.
-- Two button grammars: tiny blue pill CTAs (`{rounded.pill}`) and compact utility rects (`{rounded.sm}`).
-- SF Pro Display + SF Pro Text — negative letter-spacing at display sizes for the signature "Apple tight" headline feel.
-- Whisper-soft elevation used only when a product image needs to breathe — exactly one drop-shadow in the entire system.
-- Tight two-row nav: slim `{component.global-nav}` + product-specific `{component.sub-nav-frosted}` with persistent right-aligned primary CTA.
-- Section rhythm across multiple pages: light hero → dark product tile → light utility tile → dark tile → parchment footer — a predictable pulse.
+## Technical Architecture
 
-## Colors
+### File Structure
 
-> **Source pages analyzed:** homepage, environment, store, iPhone 17 Pro buy page, accessories index. The color system is identical across all five surfaces; only the surface-mode mix differs.
+```
+project/
+├── index.html      ← All slide markup; one <div id="slide-N"> per slide
+├── slide.css       ← All styles; single file
+├── slide.js        ← Navigation, viewport scaling, KaTeX init, Graph class, all graph draw functions
+└── design.md       ← This file
+```
 
-### Brand & Accent
-- **Action Blue** (`{colors.primary}` — #0066cc): The single brand-level interactive color. All text links, all blue pill CTAs ("Learn more", "Buy"), and the focus ring root. This is Apple's quiet but universal "click me" signal. Press state shifts to a slightly darker variant via the active scale transform rather than a hex change.
-- **Focus Blue** (`{colors.primary-focus}` — #0071e3): A marginally brighter sibling of Action Blue, reserved for the keyboard focus ring on buttons (`outline: 2px solid`).
-- **Sky Link Blue** (`{colors.primary-on-dark}` — #2997ff): A brighter blue used on dark surfaces for in-copy links and inline callouts, where Action Blue would disappear against the tile background.
+### HTML Skeleton
 
-### Surface
-- **Pure White** (`{colors.canvas}` — #ffffff): The dominant canvas. Content, utility cards, store tiles, configurator grids.
-- **Parchment** (`{colors.canvas-parchment}` — #f5f5f7): The signature Apple off-white. Used for alternating light tiles, footer region, and the default page canvas in store utility sections. Just different enough from white to create rhythm.
-- **Pearl Button** (`{colors.surface-pearl}` — #fafafc): A near-white used as the fill for secondary "ghost" buttons — lighter than the parchment canvas so the button still reads as a button against `{colors.canvas-parchment}`.
-- **Near-Black Tile 1** (`{colors.surface-tile-1}` — #272729): The primary dark-tile surface on the homepage product grid.
-- **Near-Black Tile 2** (`{colors.surface-tile-2}` — #2a2a2c): A micro-step lighter — used where a dark tile sits directly above or below Tile 1 to create the faintest separation.
-- **Near-Black Tile 3** (`{colors.surface-tile-3}` — #252527): A micro-step darker — used at the bottom of the stack and in embedded video/player frames.
-- **Pure Black** (`{colors.surface-black}` — #000000): Reserved for true void — video player backgrounds, edge-to-edge photographic overlays, the global nav bar background.
-- **Translucent Chip Gray** (`{colors.surface-chip-translucent}` — #d2d2d7): The base hex of the translucent gray chip used over photography for circular control buttons. In production, applied at ~64% alpha as `rgba(210, 210, 215, 0.64)`.
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>발표 제목</title>
+  <link rel="stylesheet" href="slide.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+</head>
+<body>
 
-### Text
-- **Near-Black Ink** (`{colors.ink}` — #1d1d1f): The voice of every headline, every body paragraph, and the dark utility button's fill. Chosen instead of pure black to keep the page feeling photographic rather than printed.
-- **Body** (`{colors.body}` — #1d1d1f): Same hex as ink — Apple uses one near-black tone for all text on light surfaces.
-- **Body On Dark** (`{colors.body-on-dark}` — #ffffff): All text on dark tiles and on the global nav bar.
-- **Body Muted** (`{colors.body-muted}` — #cccccc): Secondary copy on dark tiles where pure white would be too loud.
-- **Ink Muted 80** (`{colors.ink-muted-80}` — #333333): Body text on the white Pearl Button surface — slightly softer than pure black.
-- **Ink Muted 48** (`{colors.ink-muted-48}` — #7a7a7a): Disabled button text and legal fine-print.
+<div id="slide-viewport">
+  <!-- slides go here -->
+</div>
 
-### Hairlines & Borders
-- **Divider Soft** (`{colors.divider-soft}` — #f0f0f0): The "border" tone on secondary buttons — functions as a ring shadow rather than a hard line. In production, often applied as `rgba(0, 0, 0, 0.04)`.
-- **Hairline** (`{colors.hairline}` — #e0e0e0): The 1px hairline border on store utility cards and configurator chips.
+<!-- Navigation Bar -->
+<div id="nav-bar">
+  <button id="btn-prev">◀</button>
+  <span id="slide-counter">1 / N</span>
+  <button id="btn-next">▶</button>
+</div>
 
-### Brand Gradient
-**No decorative gradients.** Atmospheric depth on product photography (the iPhone 17 Pro camera plate, the Apple Watch bands, AirPods reflections) is inherent to the imagery, not a CSS gradient overlay. The environment page's hero uses photographic atmosphere (mountain vista at dawn) but no gradient tokens are defined. Apple is the rare luxury-brand site with zero gradient-based design tokens.
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script src="slide.js"></script>
+</body>
+</html>
+```
+
+### Viewport Scaling
+
+The slide viewport is **exactly 1920×1080 px** and is scaled (not reflowed) to fit any window size. All coordinates and font sizes in CSS are for the 1920×1080 canvas — do not use `vw`/`vh` units inside slides.
+
+```javascript
+// In slide.js — runs on load and resize
+function scaleViewport() {
+  const vp = document.getElementById('slide-viewport');
+  const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  const ox = (window.innerWidth  - 1920 * scale) / 2;
+  const oy = (window.innerHeight - 1080 * scale) / 2;
+  vp.style.transform = `scale(${scale})`;
+  vp.style.position  = 'absolute';
+  vp.style.left      = `${ox}px`;
+  vp.style.top       = `${oy}px`;
+}
+window.addEventListener('resize', scaleViewport);
+scaleViewport();
+```
+
+### Navigation
+
+```javascript
+const TOTAL = N; // replace with actual slide count
+let current = 1;
+
+function showSlide(n) {
+  document.getElementById(`slide-${current}`).classList.remove('active');
+  current = Math.max(1, Math.min(TOTAL, n));
+  document.getElementById(`slide-${current}`).classList.add('active');
+  document.getElementById('slide-counter').textContent = `${current} / ${TOTAL}`;
+  document.getElementById('btn-prev').disabled = current === 1;
+  document.getElementById('btn-next').disabled = current === TOTAL;
+}
+
+function navigate(dir) { showSlide(current + dir); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   navigate(-1);
+});
+document.getElementById('btn-prev').addEventListener('click', () => navigate(-1));
+document.getElementById('btn-next').addEventListener('click', () => navigate(1));
+```
+
+---
+
+## Color System
+
+Defined as CSS custom properties in `:root`. Always use these variables — never inline hex inside components.
+
+```css
+:root {
+  --c-bg:        #f5f5f7;   /* Default slide background (Apple parchment) */
+  --c-white:     #ffffff;   /* Pure white (graph backgrounds, cards) */
+  --c-dark:      #1d1d1f;   /* Cover / Outro slide background (near-black) */
+  --c-tile-dark: #272729;   /* Table headers, dark boxes */
+  --c-ink:       #1d1d1f;   /* Primary text on light backgrounds */
+  --c-muted:     #6e6e73;   /* Secondary text, chapter labels, captions */
+  --c-accent:    #0066cc;   /* THE single interactive/emphasis color */
+  --c-accent-dk: #2997ff;   /* Accent on dark surfaces (Cover, Outro) */
+  --c-red:       #c0392b;   /* Graph curve 2, box-red, error / negative */
+  --c-green:     #1a7a3c;   /* Graph curve 3, box-green, stable / positive */
+  --c-border:    #e0e0e0;   /* Hairline borders, table rows, dividers */
+  --margin-h:    90px;      /* Horizontal safe-margin for all content */
+  --margin-v:    68px;      /* Header height (= top of title-zone) */
+  --f-sans: 'IBM Plex Sans KR', 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+}
+```
+
+### Color Usage Rules
+
+| Context | Variable |
+|---|---|
+| All links, buttons, highlights, box borders (light bg) | `--c-accent` |
+| Same on dark backgrounds | `--c-accent-dk` |
+| Second curve / negative emphasis | `--c-red` |
+| Third curve / positive / stable | `--c-green` |
+| Body text | `--c-ink` |
+| Chapter label, page number, captions | `--c-muted` |
+| Section dividers, table borders | `--c-border` |
+| Standard slide background | `--c-bg` |
+| Cover / Outro background | `--c-dark` |
+
+**Rule:** Never introduce a second interactive color. `--c-accent` carries every "click me" signal.
+
+---
 
 ## Typography
 
-### Font Family
-- **Display**: `SF Pro Display, system-ui, -apple-system, sans-serif` — Apple's proprietary display face, optimized for sizes ≥ 19px. Defines the voice of every headline.
-- **Body / UI**: `SF Pro Text, system-ui, -apple-system, sans-serif` — the text-optimized variant used for body copy, captions, buttons, and links below 20px.
-- **OpenType features**: `font-variant-numeric: numerator` is enabled on numeric links (pricing tables, spec sheets). Display sizes rely on tight tracking rather than contextual ligatures.
+Font family: **IBM Plex Sans KR** (Korean) + **IBM Plex Sans** (Latin), loaded from Google Fonts. KaTeX Math only for equations.
 
-### Hierarchy
+```css
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap');
+```
 
-| Token | Size | Weight | Line Height | Letter Spacing | Use |
-|---|---|---|---|---|---|
-| `{typography.hero-display}` | 56px | 600 | 1.07 | -0.28px | Hero headline; the signature "Apple tight" tracking |
-| `{typography.display-lg}` | 40px | 600 | 1.10 | 0 | Tile headlines atop every product tile |
-| `{typography.display-md}` | 34px | 600 | 1.47 | -0.374px | Section heads (SF Pro Text at display proportions) |
-| `{typography.lead}` | 28px | 400 | 1.14 | 0.196px | Product tile subcopy |
-| `{typography.lead-airy}` | 24px | 300 | 1.5 | 0 | Environment-page lead paragraphs (the rare weight 300) |
-| `{typography.tagline}` | 21px | 600 | 1.19 | 0.231px | Sub-tile tagline; sub-nav category name |
-| `{typography.body-strong}` | 17px | 600 | 1.24 | -0.374px | Inline strong emphasis |
-| `{typography.body}` | 17px | 400 | 1.47 | -0.374px | Default paragraph |
-| `{typography.dense-link}` | 17px | 400 | 2.41 | 0 | Footer / store utility link lists (relaxed leading) |
-| `{typography.caption}` | 14px | 400 | 1.43 | -0.224px | Secondary captions, button text |
-| `{typography.caption-strong}` | 14px | 600 | 1.29 | -0.224px | Emphasized captions |
-| `{typography.button-large}` | 18px | 300 | 1.0 | 0 | Store hero CTAs (the rare weight 300) |
-| `{typography.button-utility}` | 14px | 400 | 1.29 | -0.224px | Utility/nav button labels |
-| `{typography.fine-print}` | 12px | 400 | 1.0 | -0.12px | Fine-print, footer body |
-| `{typography.micro-legal}` | 10px | 400 | 1.3 | -0.08px | Micro legal disclaimers |
-| `{typography.nav-link}` | 12px | 400 | 1.0 | -0.12px | Global nav menu items |
+### Size Scale (for 1920×1080 canvas)
 
-### Principles
+| Role | Size | Weight | Letter-spacing | Class / Element |
+|---|---|---|---|---|
+| Cover title | 82px | 700 | -0.03em | `.cover-title` |
+| Outro main | 96px | 700 | -0.03em | `.outro-main` |
+| Cover subtitle | 42px | 300 | -0.01em | `.cover-sub` |
+| Slide title | 58px | 600 | -0.02em | `.slide-title` |
+| Slide subtitle | 34px | 400 | -0.01em | `.slide-subtitle` |
+| Body / bullet | 36px | 400 | 0 | `.bullet-list li` |
+| Body small | 32px | 400 | 0 | `.bullet-list.sm li` |
+| Box body | 34px | 400 | 0 | `.box-body` |
+| Display math | 40px | 400 | 0 | `.display-math` |
+| Display math sm | 34px | 400 | 0 | `.display-math-sm` |
+| TOC entry | 36px | 400 | 0 | `.toc-text` |
+| Chapter label | 22px | 500 | 0.08em | `.chapter-label` |
+| Section label | 28px | 600 | 0.06em | `.section-label` |
+| Box title | 26px | 600 | 0.04em | `.box-title` |
+| Graph label | 26px | 400 | 0 | `.graph-label` |
+| Badge | 26px | 600 | 0.02em | `.badge` |
 
-- **Negative letter-spacing at display sizes.** Every headline at 17px and up carries a slight tracking tighten (`-0.12 → -0.374px`). This produces the iconic "Apple tight" headline cadence. Never used at 12px or below.
-- **Body copy at 17px, not 16px.** Apple breaks the SaaS convention and runs paragraph text at 17px. The extra pixel gives the page an unmistakable "reading, not scanning" pace.
-- **Weight 300 is real and rare.** Used deliberately on a handful of large-size reads (`{typography.button-large}` at 18px/300 and `{typography.lead-airy}` at 24px/300). It's not an accident — it's a light-atmosphere cue reserved for moments where the content should feel airy.
-- **Weight 600, not 700, for headlines.** Apple's headlines sit at weight 600. Weight 700 is used sparingly for `{typography.tagline}` (21px) when a touch more assertion is needed.
-- **Line-height is context-specific.** Display sizes use 1.07–1.19 (tight). Body uses 1.47. Utility link stacks in the footer/store use an unusually relaxed 2.41 (`{typography.dense-link}`). The 2.41 is not a bug — it's how the footer's dense link columns breathe.
-- **Weight 500 is deliberately absent.** The ladder is 300 / 400 / 600 / 700. Mid-weight readings always use 600.
+**Minimum text size on a slide: 26px.** Never go below this — anything smaller is illegible at presentation distance.
 
-### Note on Font Substitutes
-SF Pro is Apple's proprietary system font. When building off-system:
+**Weight ladder: 300 / 400 / 500 / 600 / 700.** Weight 600 for all headlines and labels. Weight 400 for body. Weight 300 for Cover subtitle / Outro subtitle only (airy, atmospheric feel).
 
-- Use `system-ui, -apple-system, BlinkMacSystemFont` as the first stack entry — on macOS/iOS/Safari this resolves to the real SF Pro.
-- For non-Apple platforms, **Inter** (Google Fonts, variable) is the closest open-source equivalent. Inter at weight 600 with `font-feature-settings: "ss03"` approximates SF Pro's rounded "a" character.
-- Nudge `letter-spacing` down by `-0.01em` on display sizes to re-create the Apple tight feel; Inter's default tracking runs slightly wider than SF Pro.
-- For body text, tighten line-height by `0.03` (from 1.47 → 1.44) when substituting Inter — Inter's taller x-height needs less leading.
+---
 
-## Layout
+## Spacing & Layout
 
-### Spacing System
-- **Base unit:** 8px. Sub-base values (2, 4, 5, 6, 7) are used for tight typographic adjustments; structural layout snaps to 8/12/16/20/24.
-- **Tokens:** `{spacing.xxs}` 4px · `{spacing.xs}` 8px · `{spacing.sm}` 12px · `{spacing.md}` 17px · `{spacing.lg}` 24px · `{spacing.xl}` 32px · `{spacing.xxl}` 48px · `{spacing.section}` 80px.
-- **Section vertical padding:** `{spacing.section}` (80px) inside a product tile; tiles stack edge-to-edge with 0 gap (the color change provides the break).
-- **Card padding:** `{spacing.lg}` (24px) inside utility grid cards.
-- **Button padding:** 8–11px vertical, 15–22px horizontal.
-- **Universal rhythm constants:** the 17px body line-height multiplier (~25px line) and 21px tagline size show up on every analyzed page.
+### Slide Zones
 
-### Grid & Container
-- **Max content width:** ~980px on text-heavy sections (environment), ~1440px on product grids (store, accessories), full-bleed for product tiles (homepage).
-- **Column patterns:** 3 to 5 column utility card grid on store/accessories; 2-column side-by-side tiles on homepage occasional sections; single-column centered stack on product tile heroes.
-- **Gutters:** 20–24px between cards in a utility grid.
+Every standard slide is divided into three fixed zones:
 
-### Whitespace Philosophy
-Apple's whitespace is the product's pedestal. Every tile begins with at least 64px of air above its headline and 48–64px below. Product renders are never crowded; the nearest content to a product image is at least 40px away. The footer is the only area that breaks this — there, Apple goes deliberately dense to make the full information architecture visible at a glance.
+```
+┌──────────────────────────────────────────────────────┐  ← y=0
+│  HEADER STRIP  (height: 68px)                        │
+│  chapter-label (left)        page-num (right)        │
+├──────────────────────────────────────────────────────┤  ← y=68px
+│  TITLE ZONE  (from y=68px, padding-top 32px)         │
+│  slide-title                                         │
+│  slide-subtitle (optional)                           │
+│  ── 2px solid var(--c-accent) border-bottom ──       │
+├──────────────────────────────────────────────────────┤  ← y≈210–260px
+│  CONTENT ZONE  (to bottom: 60px safe margin)         │
+│  flex column, gap: 28px                              │
+│                                                      │
+└──────────────────────────────────────────────────────┘  ← y=1080px
+```
 
-## Elevation & Depth
+### Content Zone Top Variants
 
-| Level | Treatment | Use |
+```css
+.content-zone          { top: 240px; }  /* default (title + subtitle) */
+.content-zone.top-210  { top: 210px; }  /* title only, no subtitle */
+.content-zone.top-260  { top: 260px; }  /* title + long subtitle or extra padding */
+```
+
+### Horizontal Margins
+
+All content uses `padding: 0 var(--margin-h)` = 90px on each side. Never place text within 90px of the left/right edge.
+
+### Column Layouts
+
+```css
+.cols   { display: flex; gap: 60px; align-items: flex-start; }
+.col    { flex: 1; }         /* equal columns */
+.col-4  { flex: 0 0 40%; }   /* 40% fixed */
+.col-5  { flex: 0 0 50%; }   /* 50% fixed */
+.col-6  { flex: 0 0 55%; }   /* 55% fixed */
+```
+
+---
+
+## Component Library
+
+All CSS for these components lives in `slide.css`.
+
+### Highlight Boxes
+
+Five semantic variants. Always use `border-radius: 16px` and `padding: 28px 36px`.
+
+```html
+<!-- Blue box (definition, key result) -->
+<div class="box box-blue">
+  <div class="box-title">THEOREM</div>
+  <div class="box-body">Content here, supports KaTeX inline \(x^2\).</div>
+</div>
+
+<!-- Red box (warning, counterexample) -->
+<div class="box box-red"> ... </div>
+
+<!-- Green box (proof complete, stable case) -->
+<div class="box box-green"> ... </div>
+
+<!-- Gray box (neutral note, remark) -->
+<div class="box box-gray"> ... </div>
+
+<!-- Dark box (emphasis on light background) -->
+<div class="box-dark"> ... </div>
+```
+
+Box border-left colors: blue=`--c-accent`, red=`--c-red`, green=`--c-green`, gray=`#aaaaaa`.
+
+### Bullet Lists
+
+```html
+<ul class="bullet-list">
+  <li>Normal item — 36px, weight 400</li>
+  <li><strong>Bold item</strong> — weight 600</li>
+</ul>
+
+<ul class="bullet-list sm">
+  <li>Smaller item — 32px</li>
+</ul>
+```
+
+Bullets are 10px circles in `--c-accent`, absolute-positioned at 18px from top.
+
+### Classification Table
+
+```html
+<table class="class-table">
+  <thead>
+    <tr>
+      <th>Column A</th>
+      <th>Column B</th>
+      <th>Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Value</td>
+      <td>Value</td>
+      <td class="cnt">3</td>      <!-- blue bold count -->
+    </tr>
+    <tr>
+      <td>Value</td>
+      <td class="highlight">Highlighted</td>
+      <td class="cnt-red">1</td>  <!-- red bold count -->
+    </tr>
+  </tbody>
+</table>
+```
+
+Header: `--c-tile-dark` background, white text, 28px. Body: 30px, zebra striping at 3% opacity.
+
+### Legend
+
+```html
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-line" style="background:#0066cc;"></div>
+    <span class="txt-sm">\(f(x)\)</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-line" style="background:#c0392b;"></div>
+    <span class="txt-sm">\(g(x)\)</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-dash" style="border-color:#888;"></div>
+    <span class="txt-sm">dashed line label</span>
+  </div>
+</div>
+```
+
+### Interactive Slider
+
+```html
+<div class="slider-row">
+  <span class="slider-label">\(a =\)</span>
+  <input type="range" id="my-slider" min="0.1" max="3.0" step="0.01" value="1.5">
+  <span class="slider-value" id="my-value">1.500</span>
+</div>
+<!-- Optional: preset buttons -->
+<div class="special-point-row">
+  <button type="button" class="special-point-btn" data-special-a="lower">Special Point A</button>
+  <button type="button" class="special-point-btn" data-special-a="upper">Special Point B</button>
+</div>
+```
+
+Slider thumb: 32×32px circle in `--c-accent`. Value display: 36px, weight 600, `--c-accent`.
+
+### Badges / Tags
+
+```html
+<span class="badge badge-blue">Theorem</span>
+<span class="badge badge-red">Warning</span>
+<span class="badge badge-green">Proved</span>
+<span class="badge badge-gray">Remark</span>
+```
+
+All badges: pill-shaped (`border-radius: 999px`), 26px, weight 600.
+
+### Flow Diagram
+
+```html
+<div class="flow-row">
+  <div class="flow-node">Step 1</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-node accent">Step 2</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-node dark">Result</div>
+</div>
+```
+
+### Stability Blocks
+
+```html
+<div class="stability-row">
+  <div class="stability-block stable">
+    <div class="sb-title">Stable</div>
+    Description or math here.
+  </div>
+  <div class="stability-block unstable">
+    <div class="sb-title">Unstable</div>
+    Description or math here.
+  </div>
+</div>
+```
+
+### Text Helpers (utility classes)
+
+```css
+.txt-sm     { font-size: 30px; }
+.txt-md     { font-size: 36px; }
+.txt-lg     { font-size: 42px; }
+.txt-muted  { color: var(--c-muted); }
+.txt-accent { color: var(--c-accent); }
+.txt-red    { color: var(--c-red); }
+.txt-green  { color: var(--c-green); }
+.txt-bold   { font-weight: 600; }
+.txt-center { text-align: center; }
+.divider    { height: 1px; background: var(--c-border); margin: 8px 0; }
+```
+
+### Section Label
+
+```html
+<div class="section-label">Key Definition</div>
+```
+
+28px, weight 600, `--c-accent`, uppercase with 0.06em tracking.
+
+---
+
+## Graph & Canvas System
+
+### Graph Container
+
+Wrap every canvas in `.graph-wrap` for the shadow and label:
+
+```html
+<div class="graph-wrap">
+  <canvas id="my-graph" width="800" height="500"></canvas>
+  <div class="graph-label">Caption text</div>
+</div>
+```
+
+Canvas style: `border-radius: 12px; box-shadow: rgba(0,0,0,0.12) 0 4px 24px;` (applied via `.graph-wrap canvas`).
+
+### Graph Class API
+
+Copy this class verbatim into `slide.js`. All drawing should use this class.
+
+```javascript
+class Graph {
+  constructor(id, { xMin, xMax, yMin, yMax }) {
+    this.canvas = document.getElementById(id);
+    if (!this.canvas) return;
+    this.ctx  = this.canvas.getContext('2d');
+    this.W    = this.canvas.width;
+    this.H    = this.canvas.height;
+    this.xMin = xMin; this.xMax = xMax;
+    this.yMin = yMin; this.yMax = yMax;
+  }
+
+  // World → Canvas coordinate transforms
+  wx(x) { return (x - this.xMin) / (this.xMax - this.xMin) * this.W; }
+  wy(y) { return (this.yMax - y) / (this.yMax - this.yMin) * this.H; }
+
+  // Fill background
+  clear(bg = '#ffffff') {
+    const { ctx, W, H } = this;
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  // Light gray grid lines
+  drawGrid(stepX = 1, stepY = 1) {
+    const { ctx, W, H } = this;
+    ctx.beginPath();
+    ctx.strokeStyle = '#ebebed';
+    ctx.lineWidth = 1;
+    for (let x = Math.floor(this.xMin); x <= this.xMax + 0.01; x += stepX) {
+      const cx = this.wx(x);
+      ctx.moveTo(cx, 0); ctx.lineTo(cx, H);
+    }
+    for (let y = Math.floor(this.yMin); y <= this.yMax + 0.01; y += stepY) {
+      const cy = this.wy(y);
+      ctx.moveTo(0, cy); ctx.lineTo(W, cy);
+    }
+    ctx.stroke();
+  }
+
+  // X and Y axes (only drawn if axis is within view)
+  drawAxes(color = '#bbb') {
+    const { ctx, W, H } = this;
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    if (this.yMin <= 0 && this.yMax >= 0) {
+      ctx.moveTo(0, this.wy(0)); ctx.lineTo(W, this.wy(0));
+    }
+    if (this.xMin <= 0 && this.xMax >= 0) {
+      ctx.moveTo(this.wx(0), 0); ctx.lineTo(this.wx(0), H);
+    }
+    ctx.stroke();
+  }
+
+  // Solid curve: f(x) → y, samples `steps` points
+  drawCurve(f, color, lw = 2.5, steps = 800) {
+    const { ctx } = this;
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lw;
+    let pen = false;
+    for (let i = 0; i <= steps; i++) {
+      const x  = this.xMin + (this.xMax - this.xMin) * i / steps;
+      const y  = f(x);
+      const ok = isFinite(y) && y >= this.yMin - 0.8 && y <= this.yMax + 0.8;
+      if (!ok) { pen = false; continue; }
+      const cx = this.wx(x), cy = this.wy(y);
+      pen ? ctx.lineTo(cx, cy) : (ctx.moveTo(cx, cy), (pen = true));
+    }
+    ctx.stroke();
+  }
+
+  // Dashed curve — same signature as drawCurve
+  drawDash(f, color, lw = 2) {
+    this.ctx.setLineDash([12, 8]);
+    this.drawCurve(f, color, lw);
+    this.ctx.setLineDash([]);
+  }
+
+  // Filled dot with white stroke (for intersection / special points)
+  dot(x, y, color, r = 7) {
+    const { ctx } = this;
+    ctx.beginPath();
+    ctx.arc(this.wx(x), this.wy(y), r, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+  }
+
+  // Text label at world coordinates
+  text(x, y, str, color = '#333', dx = 10, dy = -10, size = 18) {
+    const { ctx } = this;
+    ctx.fillStyle = color;
+    ctx.font = `${size}px "IBM Plex Sans KR","IBM Plex Sans",sans-serif`;
+    ctx.textAlign = 'left';
+    ctx.fillText(str, this.wx(x) + dx, this.wy(y) + dy);
+  }
+
+  // Axis tick labels (x-axis)
+  ticksX(vals, labelFn, dy = 22, size = 18) {
+    const { ctx } = this;
+    ctx.fillStyle = '#999';
+    ctx.font = `${size}px "IBM Plex Sans",sans-serif`;
+    ctx.textAlign = 'center';
+    for (const v of vals) ctx.fillText(labelFn(v), this.wx(v), this.wy(0) + dy);
+  }
+
+  // Axis tick labels (y-axis)
+  ticksY(vals, labelFn, dx = -8, size = 18) {
+    const { ctx } = this;
+    ctx.fillStyle = '#999';
+    ctx.font = `${size}px "IBM Plex Sans",sans-serif`;
+    ctx.textAlign = 'right';
+    for (const v of vals) ctx.fillText(labelFn(v), this.wx(0) + dx, this.wy(v) + 6);
+  }
+}
+```
+
+### Graph Color Conventions
+
+| Curve | Color | Hex |
 |---|---|---|
-| Flat | No shadow, no border | Full-bleed tiles, global nav, footer, body sections |
-| Soft hairline | 1px `rgba(0, 0, 0, 0.08)` border | Utility cards, sub-nav frosted-glass separator |
-| Backdrop blur | `backdrop-filter: blur(N)` on Parchment 80% | Sub-nav and the iPhone buy floating sticky bar |
-| Product shadow | `rgba(0, 0, 0, 0.22) 3px 5px 30px 0` | Product renders resting on a surface (the only true "shadow" in the system) |
+| Primary / first function | Blue | `#0066cc` |
+| Secondary / second function | Red | `#c0392b` |
+| Reference line (y=x, asymptote) | Dashed gray | `#bbb` |
+| Special / intersection point | Orange | `#ff6b00` |
+| Branch point | Near-black | `#1d1d1f` |
+| Grid | Light gray | `#ebebed` |
+| Axes | Medium gray | `#bbb` |
+| Tick labels | Muted | `#999` |
 
-**Shadow philosophy.** Apple uses **exactly one** drop-shadow, and it is applied to photographic product imagery — never to cards, never to buttons, never to text. Elevation in the UI comes from (a) surface-color change (light tile ↔ dark tile) and (b) backdrop-blur on sticky bars. The single shadow is about giving the product weight, not about UI hierarchy.
+### Initializing Graphs
 
-### Decorative Depth
-- **Atmospheric imagery** on the environment page (photographic vista) supplies mood; no CSS gradient involved.
-- **Edge-to-edge tile alternation** creates rhythm without borders or shadows — the color change itself is the divider.
-- **Backdrop-filter blur** on `{component.sub-nav-frosted}` and `{component.floating-sticky-bar}` creates a "floating over content" effect that's functional, not decorative.
+All graph draw functions must be called inside `DOMContentLoaded` → `requestAnimationFrame`:
 
-## Shapes
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+  renderMathInElement(document.body, { /* KaTeX config */ });
+  requestAnimationFrame(() => {
+    drawMyGraph();
+    initInteractiveGraph();
+  });
+});
+```
 
-### Border Radius Scale
+---
 
-| Token | Value | Use |
-|---|---|---|
-| `{rounded.none}` | 0px | Full-bleed product tiles (no corner rounding) |
-| `{rounded.xs}` | 5px | Inline links when styled as subtle chips (rare) |
-| `{rounded.sm}` | 8px | Dark utility buttons (Sign In, Bag), inline card imagery |
-| `{rounded.md}` | 11px | White Pearl Button capsules |
-| `{rounded.lg}` | 18px | Store utility cards, accessories grid cards |
-| `{rounded.pill}` | 9999px | Primary blue pill CTAs, sub-nav buy button, configurator option chips, search input — the signature Apple pill |
-| `{rounded.full}` | 9999px / 50% | Circular control chips floating over photography |
+## Slide Types
 
-### Photography Geometry
-- **Hero imagery**: full-bleed, 21:9 or taller on the homepage; 16:9 on environment and shop pages. Product renders are photographic-realistic, often shot on a tinted surface that becomes the tile background.
-- **Product renders**: PNG/WebP with transparency; rest on a surface tile and pick up the system shadow.
-- **Accessory grid**: square 1:1 crops at `{rounded.lg}` (18px) radius, light neutral backgrounds, product centered with 20–40px internal padding.
-- **No rounded imagery in hero tiles** — images are full-bleed rectangular. Rounding (`{rounded.sm}`, `{rounded.lg}`) appears only on inline card imagery.
-- Lazy-loading via responsive `srcset` and `sizes` across all breakpoints; CDN-optimized WebP.
+### Cover Slide
 
-## Components
+```html
+<div class="slide slide-cover active" id="slide-1">
+  <div class="cover-inner">
+    <div class="cover-tag">CHAPTER / COURSE LABEL</div>
+    <h1 class="cover-title">Presentation Title</h1>
+    <p class="cover-sub">Subtitle or tagline</p>
+    <div class="cover-meta">
+      <div>Author name(s)</div>
+      <div>Date or context</div>
+    </div>
+  </div>
+  <div class="cover-line"></div>  <!-- 6px accent bar at bottom -->
+</div>
+```
 
-### Top Navigation
+- Background: `--c-dark` (near-black). Text: white.
+- `cover-tag`: small uppercase label in `--c-accent-dk`.
+- `cover-line`: 6px blue bar fixed at the very bottom.
+- No `.slide-header` on cover.
 
-**`global-nav`** — Persistent, ultra-thin black nav bar pinned to the top of every page. Background `{colors.surface-black}`, height 44px, text `{colors.on-dark}` in `{typography.nav-link}` (12px / 400 / -0.12px tracking). Links are quiet, spaced ~20px apart, running edge-to-edge across the top. Right-aligned cluster: Search, Bag icons — always visible. On mobile, collapses to hamburger at ~834px and the Apple logo centers.
+### Table of Contents Slide
 
-**`sub-nav-frosted`** — Surface-specific nav that sticks below the global nav. Background `{colors.canvas-parchment}` at 80% opacity with backdrop-filter blur, creating a frosted-glass effect. Height 52px. Content on left: product category name ("iPhone", "Store", "Accessories") in `{typography.tagline}` (21px / 600). Content right: inline nav links in `{typography.button-utility}` (14px), ending in a persistent `{component.button-primary}` ("Buy") or a utility link.
+```html
+<div class="slide" id="slide-2">
+  <div class="slide-header">
+    <span class="chapter-label">목차</span>
+    <span class="page-num">2 / N</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">목차</h1>
+  </div>
+  <div class="content-zone top-210">
+    <ol class="toc-list">
+      <li class="toc-item">
+        <span class="toc-num">01</span>
+        <span class="toc-text">Section title with optional \(math\)</span>
+      </li>
+      <!-- repeat for each section -->
+    </ol>
+  </div>
+</div>
+```
 
-### Buttons
+### Standard Content Slide
 
-**`button-primary`** — The signature Apple action. Background `{colors.primary}` (Action Blue #0066cc), text `{colors.on-primary}` in `{typography.body}` (SF Pro Text 17px / 400), rounded `{rounded.pill}` (full pill — capsule-shaped), padding 11px × 22px. The full-pill radius IS the brand action signal.
-- Active state: `{component.button-primary-active}` — `transform: scale(0.95)` (the system-wide micro-interaction).
-- Focus state: `{component.button-primary-focus}` — 2px solid `{colors.primary-focus}` outline.
+```html
+<div class="slide" id="slide-N">
+  <div class="slide-header">
+    <span class="chapter-label">CHAPTER NAME</span>
+    <span class="page-num">N / TOTAL</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">Slide Title</h1>
+    <p class="slide-subtitle">Optional subtitle</p>
+  </div>
+  <div class="content-zone">
+    <!-- Use .box-*, .bullet-list, .cols, .class-table, .display-math, etc. -->
+  </div>
+</div>
+```
 
-**`button-secondary-pill`** — Used as the second CTA when two blue pills appear together ("Learn more" / "Buy"). Background transparent, text `{colors.primary}`, 1px solid `{colors.primary}` border, rounded `{rounded.pill}`, padding 11px × 22px. Reads as a "ghost pill."
+### Interactive Graph Slide
 
-**`button-dark-utility`** — Global nav actions (Sign In, Bag, language selector). Background `{colors.ink}` (#1d1d1f), text `{colors.on-dark}` in `{typography.button-utility}` (14px / 400 / -0.224px tracking), rounded `{rounded.sm}` (8px), padding 8px × 15px. Active state shrinks via `transform: scale(0.95)`.
+```html
+<div class="slide" id="slide-N">
+  <div class="slide-header">
+    <span class="chapter-label">CHAPTER</span>
+    <span class="page-num">N / TOTAL</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">Title with \(math\)</h1>
+  </div>
+  <div class="content-zone top-210" style="gap:10px;">
+    <div class="graph-wrap" style="gap:8px;">
+      <canvas id="canvas-slideN" width="1200" height="500"></canvas>
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-line" style="background:#0066cc;"></div>
+          <span class="txt-sm">\(f(x)\)</span>
+        </div>
+      </div>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">\(a =\)</span>
+      <input type="range" id="my-slider" min="0.1" max="3.0" step="0.01" value="1.5">
+      <span class="slider-value" id="my-value">1.500</span>
+    </div>
+    <div class="intersect-info" id="my-info">
+      count: <strong>—</strong>
+    </div>
+  </div>
+</div>
+```
 
-**`button-pearl-capsule`** — Product-card secondary button. Background `{colors.surface-pearl}` (#fafafc), text `{colors.ink-muted-80}` in `{typography.caption}` (14px), 3px solid `{colors.divider-soft}` border (functions as a soft ring rather than a visible line), rounded `{rounded.md}` (11px), padding 8px × 14px.
+### Dark / Section Divider Slide
 
-**`button-store-hero`** — A larger primary CTA used on store hero surfaces. Same Action Blue + Paper White as `{component.button-primary}`, but with `{typography.button-large}` (18px / 300 — note the rare weight 300) and slightly more padding (14px × 28px). Used sparingly on the store landing.
+```html
+<div class="slide slide-dark" id="slide-N">
+  <div class="slide-header">
+    <span class="chapter-label">Section</span>
+  </div>
+  <div class="title-zone">
+    <h1 class="slide-title">Section Title</h1>
+    <p class="slide-subtitle">Description</p>
+  </div>
+  <div class="content-zone">
+    <!-- content; bullets, boxes work on dark bg -->
+  </div>
+</div>
+```
 
-**`button-icon-circular`** — Floats over photography. 44 × 44px, background `{colors.surface-chip-translucent}` at ~64% alpha, icon in `{colors.ink}`, rounded `{rounded.full}`. Used for carousel controls, close buttons, and in-image controls (product image thumbnails on the iPhone buy page).
+### Outro Slide
 
-**`text-link`** — Inline body links in `{colors.primary}` (Action Blue). Underlined or non-underlined per context.
+```html
+<div class="slide slide-outro" id="slide-N">
+  <div class="outro-inner">
+    <div class="outro-main">감사합니다</div>
+    <div class="outro-sub">Any final note, question prompt, or reference</div>
+  </div>
+  <div class="cover-line"></div>
+</div>
+```
 
-**`text-link-on-dark`** — Inline body links on dark tiles in `{colors.primary-on-dark}` (Sky Link Blue #2997ff) — Action Blue would disappear against `{colors.surface-tile-1}`.
+---
 
-### Cards & Containers
+## KaTeX Integration
 
-**`product-tile-light`** — Full-bleed light tile. Background `{colors.canvas}` (white), text `{colors.ink}`, rounded `{rounded.none}` (0 — tiles touch edges), vertical padding `{spacing.section}` (80px). Centered stack: product name in `{typography.display-lg}` (40px / 600) → one-line tagline in `{typography.lead}` (28px / 400) → two `{component.button-primary}` CTAs ("Learn more" / "Buy") → product render resting on the surface with the system shadow.
+### CDN Links (add to `<head>` and before `</body>`)
 
-**`product-tile-parchment`** — Same as `{component.product-tile-light}` but on `{colors.canvas-parchment}` (#f5f5f7). Used to break two consecutive white tiles.
+```html
+<!-- In <head> -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 
-**`product-tile-dark`** — Full-bleed dark tile. Background `{colors.surface-tile-1}` (#272729), text `{colors.on-dark}`, rounded `{rounded.none}`, vertical padding `{spacing.section}` (80px). Same content stack as the light tile but with `{component.text-link-on-dark}` for inline copy and `{component.button-primary}` (Action Blue still works on the dark surface). Used on the homepage product grid as the alternating dark band.
+<!-- Before </body>, after slide.css -->
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+```
 
-**`product-tile-dark-2`** — Variant on `{colors.surface-tile-2}` (#2a2a2c). Used where a dark tile sits directly above or below `{component.product-tile-dark}` to create the faintest separation through micro-step lightness change.
+### Initialization (in `slide.js`)
 
-**`product-tile-dark-3`** — Variant on `{colors.surface-tile-3}` (#252527). Used at the bottom of the stack and in embedded video/player frames.
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: '\\(',  right: '\\)',  display: false },  // inline: \( ... \)
+      { left: '\\[',  right: '\\]',  display: true  },  // display: \[ ... \]
+    ],
+    throwOnError: false,
+    strict: false,
+  });
+  requestAnimationFrame(() => {
+    // draw all graphs here
+  });
+});
+```
 
-**`store-utility-card`** — Used in store grid and accessories grid. Background `{colors.canvas}` (white), 1px solid `{colors.hairline}` border, rounded `{rounded.lg}` (18px), padding `{spacing.lg}` (24px). Top: product image (1:1 crop with `{rounded.sm}` (8px) inner image radius). Below: product name in `{typography.body-strong}` (17px / 600), price in `{typography.body}` (17px / 400), and a `{component.text-link}` ("Buy" or "Learn more"). No shadow by default; product render itself carries the system product-shadow.
+### Usage in HTML
 
-**`configurator-option-chip`** — Pill-shaped tappable cell used in the iPhone 17 Pro buy page. Background `{colors.canvas}`, text `{colors.ink}` in `{typography.caption}`, rounded `{rounded.pill}`, padding 12px × 16px. Contains a small product thumbnail + label + price delta. Arranged in a grid of 4–5 options per row.
+```html
+<!-- Inline math -->
+<p>The function \(f(x) = a^x\) has base \(a > 0\).</p>
 
-**`configurator-option-chip-selected`** — Selected state. Border upgrades to 2px solid `{colors.primary-focus}`. Same shape, same content.
+<!-- Display math (centered, larger) -->
+<div class="display-math">\[ W(x) e^{W(x)} = x \]</div>
 
-**`environment-quote-card`** — A photographic-canvas hero specific to the environment page. Dark photographic backdrop (mountain vista at dawn) with `{colors.surface-tile-1}` as the fallback color, centered white-text headline in `{typography.display-lg}` (40px), small green "Apple 2030" pictographic logo above the headline, single `{component.button-primary}` below. Padding `{spacing.section}` (80px).
+<!-- Display math (smaller variant) -->
+<div class="display-math-sm">\[ x = \frac{-W(-\ln a)}{\ln a} \]</div>
+```
 
-**`floating-sticky-bar`** — Floats at the bottom of the viewport on the iPhone 17 Pro buy page during scroll. Background `{colors.canvas-parchment}` at 80% opacity with `backdrop-filter: blur(N)`, height 64px, padding 12px × 32px. Left: running price total in `{typography.body}`. Right: `{component.button-primary}` ("Add to Bag").
+**Critical:** KaTeX font-size is set to `inherit` in CSS (`display.css` override: `.katex { font-size: inherit !important; }`), so it respects the containing element's size.
 
-### Inputs & Forms
+---
 
-**`search-input`** — The accessories search input. Background `{colors.canvas}`, text `{colors.ink}` in `{typography.body}` (17px), 1px solid `rgba(0, 0, 0, 0.08)` border, rounded `{rounded.pill}` (full pill — search is also pill-shaped, matching the CTA grammar), padding 12px × 20px, height 44px. Leading icon: search glyph at 14px, muted tint.
+## Navigation Bar (CSS)
 
-Error and validation states were not surfaced in the analyzed pages.
+The nav bar is fixed, outside `#slide-viewport`, always visible:
 
-### Footer
+```css
+#nav-bar {
+  position: fixed;
+  right: 22px;
+  bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(29,29,31,0.82);
+  backdrop-filter: blur(12px);
+  border-radius: 999px;
+  padding: 6px 14px;
+  z-index: 9999;
+}
+#nav-bar button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 17px;
+  cursor: pointer;
+  padding: 4px 9px;
+  border-radius: 8px;
+}
+#nav-bar button:hover   { background: rgba(255,255,255,0.12); }
+#nav-bar button:disabled { opacity: 0.3; cursor: default; }
+#slide-counter {
+  font-family: var(--f-sans);
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  min-width: 44px;
+  text-align: center;
+}
+```
 
-**`footer`** — Background `{colors.canvas-parchment}` (#f5f5f7), text `{colors.ink-muted-80}`. Link columns in `{typography.dense-link}` (17px / 400 / 2.41 line-height — the relaxed leading is what makes the dense columns scannable). Column headings in `{typography.caption-strong}` (14px / 600). Legal row at the very bottom in `{typography.fine-print}` (12px / 400) with `{colors.ink-muted-48}` text. Vertical padding 64px.
+---
 
 ## Do's and Don'ts
 
 ### Do
-- Use `{colors.primary}` (Action Blue #0066cc) for every interactive element — links, pill CTAs, focus signals — and nothing else. The single accent is non-negotiable.
-- Set headlines in `{typography.hero-display}` or `{typography.display-lg}` with negative letter-spacing (`-0.28 → -0.374px`) to get the signature "Apple tight" cadence.
-- Run body copy at `{typography.body}` (17px / 400 / 1.47 / -0.374px) — not 16px. The extra pixel defines the brand's reading pace.
-- Alternate `{component.product-tile-light}` (or parchment) and `{component.product-tile-dark}` for full-bleed section rhythm. The color change IS the divider.
-- Reserve `{rounded.pill}` for the primary blue CTA and any other element that should read as an "action" (configurator chips, search input, sticky bar CTA).
-- Apply the single product-shadow (`rgba(0, 0, 0, 0.22) 3px 5px 30px`) only to product renders resting on a surface — never on cards, buttons, or text.
-- Use `transform: scale(0.95)` as the active/press state on every button — it's the system-wide micro-interaction.
-- Keep the global nav `{colors.surface-black}` (true black) — it's the only place pure black appears on most pages.
+- Use `--c-accent` (#0066cc) for every interactive element, highlight, and link — no exceptions.
+- Keep `--c-red` and `--c-green` only for semantic meaning (error/positive, graph curve 2/3).
+- Set slide titles at 58px / weight 600 / letter-spacing -0.02em.
+- Use `.content-zone.top-210` when there is no subtitle; `.content-zone` (240px) when there is.
+- Use `requestAnimationFrame` inside `DOMContentLoaded` to draw all graphs after KaTeX renders.
+- Use the `Graph` class for all canvas work — do not write raw canvas code outside of it.
+- Keep all font sizes ≥ 26px inside slides.
+- Use `.box-blue` for definitions/theorems, `.box-red` for warnings, `.box-green` for results.
+- Use `.display-math` (40px) for the main equation on a slide, `.display-math-sm` (34px) for secondary.
 
 ### Don't
-- Don't introduce a second accent color; every "click me" signal is `{colors.primary}` (Action Blue).
-- Don't add shadows to cards, buttons, or text — shadow is reserved for product imagery.
-- Don't use gradients as decorative backgrounds; atmosphere comes from photography.
-- Don't set body copy at weight 500 — Apple's ladder is 300 / 400 / 600 / 700, with 500 deliberately absent. Body is always 400; strong inline is 600; display is 600.
-- Don't round full-bleed tiles — tiles are rectangular and edge-to-edge; the color change is the divider.
-- Don't tighten line-height below 1.47 for body copy — the editorial leading is part of the brand.
-- Don't mix radii grammars — use `{rounded.sm}` for compact utility, `{rounded.lg}` for utility cards, `{rounded.pill}` for pills, and nothing in between (except the rare `{rounded.md}` Pearl Button).
-- Don't use `{colors.primary-on-dark}` (Sky Link Blue) on light surfaces — it's the dark-tile-only variant. Action Blue is for light surfaces.
+- Don't use `vw`/`vh` units inside slides — everything is in absolute px for the 1920×1080 canvas.
+- Don't add shadows to boxes, buttons, or text — only canvas elements get shadows.
+- Don't introduce decorative gradients.
+- Don't use any font other than IBM Plex Sans (text) and KaTeX Math (equations).
+- Don't put text below 26px inside `.slide`.
+- Don't leave the bottom third of a content slide empty without a clear reason.
+- Don't put two adjacent `.slide-cover`-style dark slides — mix light and dark.
+- Don't hardcode hex colors; always use the CSS variables.
 
-## Responsive Behavior
-
-### Breakpoints
-
-| Name | Width | Key Changes |
-|---|---|---|
-| Small phone | ≤ 419px | Single-column tiles; sub-nav collapses to category name + primary CTA only; hero typography drops to 28px |
-| Phone | 420–640px | Single-column stack; product renders scale to 80% of tile width; hero h1 drops to 34px |
-| Large phone | 641–735px | Tiles transition to tighter padding (48px vertical vs 80px); fine-print wraps |
-| Tablet portrait | 736–833px | Global nav collapses to hamburger; sub-nav hides category chips, keeps primary CTA |
-| Tablet landscape | 834–1023px | Global nav returns fully expanded; 3-column utility grids become 2-column |
-| Small desktop | 1024–1068px | Product tiles use 2/3 width with margin gutters; hero h1 stays at 40px |
-| Desktop | 1069–1440px | Full layout; 4–5 column store grids; 1440px content max |
-| Wide desktop | ≥ 1441px | Content locks at 1440px, margins absorb extra width |
-
-The structural breakpoints that matter for agents: 1440px (content lock), 1068px (small-desktop), 833px (tablet landscape switch), 734px (tablet portrait), 640px (phone), 480px (small phone).
-
-### Touch Targets
-- Minimum 44 × 44px. `{component.button-primary}` lands at ~44 × 100px (with the full-pill radius making the visible hit area more generous than the label suggests).
-- `{component.button-icon-circular}` is exactly 44 × 44px.
-- Global nav utility links are smaller (~32 × 80px) — they deliberately sit at a tighter target because they're precision desktop actions, and the mobile hamburger replaces them at ≤ 833px.
-
-### Collapsing Strategy
-- **Global nav**: full horizontal link row on desktop → collapses to Apple logo + hamburger + bag icon at 834px and below.
-- **Sub-nav**: category name + inline links + primary CTA → category name + primary CTA only at mobile; inline links move into a hamburger tray.
-- **Product tiles**: stack from 2-column to 1-column at 834px; vertical padding tightens from 80px → 48px at small-phone.
-- **Utility grids** (store, accessories): 5-col → 4-col (1440px) → 3-col (1068px) → 2-col (834px) → 1-col (640px).
-- **Hero typography**: `{typography.hero-display}` (56px) → `{typography.display-lg}` (40px) at 1068px → 34px at 640px → 28px at 419px.
-
-### Image Behavior
-- All product imagery uses responsive `srcset` with breakpoint-matched crops.
-- Hero photography may switch art direction at mobile (e.g., the environment page's vista crops to a taller aspect ratio on mobile, framing the subject differently).
-- Product renders maintain their 1:1 or 4:3 aspect ratios across breakpoints; only scale changes.
-- Lazy-loading is default; the above-fold hero loads eagerly.
-
-## Iteration Guide
-
-1. Focus on ONE component at a time. Reference its YAML key directly (`{component.product-tile-dark}`, `{component.search-input}`).
-2. Variants of an existing component (`-active`, `-focus`, `-2`, `-3`) live as separate entries in `components:`.
-3. Use `{token.refs}` everywhere — never inline hex.
-4. Never document hover. Default and Active/Pressed states only.
-5. Display headlines stay SF Pro Display 600 with negative letter-spacing. Body stays SF Pro Text 400 at 17px. The boundary is unbreakable.
-6. The single drop-shadow (`rgba(0, 0, 0, 0.22) 3px 5px 30px`) is reserved for product photography only.
-7. When in doubt about emphasis: alternate surface (light → dark tile) before adding chrome.
-
-## Known Gaps
-
-- Form validation and error states were not surfaced on the analyzed pages; only the neutral search input is documented.
-- The homepage's embedded video/player frame uses `{colors.surface-black}`; interior player controls are not documented (they're a platform widget, not a web-design token).
-- Some component imagery is dynamic (rotating product hero) and its specific copy varies per surface — component specs name the structure, not the rotating content.
-- Dark-mode counterparts for store and accessories utility cards were not surfaced on the analyzed pages; the system documented is the daytime/light-dominant variant Apple ships by default.
-- Atmospheric photography (environment page mountain vista) is a content asset, not a design token; the documented `{component.environment-quote-card}` describes the structural surface only.
-- The exact backdrop-filter blur radius on `{component.sub-nav-frosted}` and `{component.floating-sticky-bar}` is platform-dependent; production CSS uses `saturate(180%) blur(20px)` as a typical baseline but the value isn't formalized as a token.
-
+---
 
 ## Presentation Output Constraints
 
-- Always generate slides in **16:9 widescreen format only**.
-- Do not generate, place, reference, simulate, or reserve space for any logo.
-- Avoid logo-like marks, brand seals, monograms, app icons, or decorative identity symbols unless the user explicitly provides one and asks to use it.
-- Every slide must feel like part of one continuous presentation system, not a collection of unrelated layouts.
+- Always generate slides in **1920×1080 px** (16:9) canvas. Scale via the viewport scaling JS.
+- Do not generate, place, reference, or reserve space for any logo.
+- Every slide must feel like part of one continuous presentation system.
+- Standard slides must have `.slide-header` + `.title-zone` + `.content-zone`.
 
 ## Font System
 
-Use the uploaded font files as the primary font source.
+Use IBM Plex Sans as the primary font for all text elements.
 
 Primary typography:
-- Use **IBM Plex Sans** as the default font for all titles, subtitles, body text, labels, captions, bullets, callouts, tables, and UI-like elements.
-- Use **KaTeX Math** only for mathematical notation, formulas, equations, technical symbols, and equation-heavy labels.
-- Minimize all other fonts. Only use fallback fonts when absolutely necessary for missing glyphs or rendering compatibility.
+- Use **IBM Plex Sans KR** / **IBM Plex Sans** as the default font for all titles, subtitles, body text, labels, captions, bullets, callouts, tables, and UI-like elements.
+- Use **KaTeX Math** only for mathematical notation, formulas, equations, and technical symbols.
+- Do not introduce any other font families.
 
 Font usage rules:
 - Do not use decorative, handwritten, serif, or display fonts.
-- Do not introduce additional font families for visual variety.
 - Preserve visual hierarchy through size, weight, spacing, alignment, and layout — not through font mixing.
-- If Korean text appears, use the uploaded Korean-compatible fallback only when IBM Plex Sans cannot render the characters correctly.
+- For Korean text, `IBM Plex Sans KR` handles all Korean characters correctly.
 
 Recommended typography:
-- Chapter label: IBM Plex Sans, small, medium weight, subtle tracking.
-- Main title: IBM Plex Sans, large, semibold.
-- Subtitle: IBM Plex Sans, medium size, regular or medium weight.
-- Body text: IBM Plex Sans, regular.
-- Equations: KaTeX Math.
+- Chapter label: IBM Plex Sans, 22px, weight 500, letter-spacing 0.08em, uppercase.
+- Main title: IBM Plex Sans, 58px, weight 600, letter-spacing -0.02em.
+- Subtitle: IBM Plex Sans, 34px, weight 400, letter-spacing -0.01em.
+- Body text: IBM Plex Sans, 36px, weight 400.
+- Equations: KaTeX Math (wrapped in `\( \)` inline or `\[ \]` display).
 
 ## Fixed Slide Structure
 
-Maintain consistent placement across slides wherever possible.
+Maintain consistent placement across slides.
+
+**Canvas size: 1920×1080 px.** All pixel values in CSS are for this canvas. The viewport JS scales to fit any screen.
 
 For standard content slides:
-- Chapter name should appear in the same top-left position on every slide.
-- Main title should appear in the same title zone on every slide.
-- Subtitle should appear directly below the title in a consistent position.
-- Body content should begin from a consistent vertical baseline.
-- Page number or small metadata, if used, should stay in a consistent corner position.
-- Do not move the title block around unless the slide is a deliberate section divider, cover slide, or visual-only slide.
-
-Recommended layout grid:
-- Canvas: 16:9.
-- Use a consistent safe margin on all slides.
-- Reserve a fixed header zone for chapter name, title, and subtitle.
-- Use the remaining area as a structured content zone.
-- Align content to a clear grid instead of placing objects freely.
+- Chapter label: top-left of `.slide-header` (y=0, height 68px).
+- Page number: top-right of `.slide-header`.
+- Main title: `.slide-title` in `.title-zone` (starting at y=68px).
+- Subtitle: `.slide-subtitle` directly below title.
+- Body content: `.content-zone` (default top=240px, or top-210/top-260).
+- Do not move the title block unless the slide is a cover, outro, or deliberate section divider.
 
 ## Content Density and Bottom Area Usage
 
@@ -343,15 +856,15 @@ For normal information slides:
 - Fill the slide with useful supporting content while preserving readability.
 - Use the lower area for secondary evidence, examples, small charts, key takeaways, footnotes, timeline strips, comparison rows, process steps, or supporting annotations.
 - Do not overcrowd the slide, but avoid excessive empty whitespace that makes the slide feel unfinished.
-- Prefer balanced, information-rich layouts over sparse web-landing-page layouts.
+- Prefer balanced, information-rich layouts over sparse layouts.
 - If the main content is short, add a compact supporting element such as:
-  - “Key implication”
-  - “Why this matters”
-  - “Example”
-  - “Evidence”
-  - “Assumption”
-  - “Risk / limitation”
-  - “Next step”
+  - "Key implication"
+  - "Why this matters"
+  - "Example"
+  - "Evidence"
+  - "Assumption"
+  - "Risk / limitation"
+  - "Next step"
   - a small table
   - a mini diagram
   - a bottom summary bar
@@ -363,22 +876,20 @@ Density rule:
 
 ## Visual Style Adaptation
 
-Use the uploaded Apple-inspired design system as a reference for restraint, clarity, spacing discipline, minimal decoration, and strong typography, but adapt it for slide presentations.
+Use the Apple-inspired design system for restraint, clarity, spacing discipline, minimal decoration, and strong typography, adapted for slide presentations.
 
 Keep:
-- Clean typography.
-- Strong alignment.
-- Minimal decoration.
-- Calm neutral surfaces.
-- Clear hierarchy.
-- Precise spacing.
-- High-quality visual balance.
+- Clean typography (IBM Plex Sans, large sizes, negative tracking on headings).
+- Strong alignment (90px horizontal margins, consistent zone positions).
+- Minimal decoration (no gradients, no unnecessary borders).
+- Calm neutral surfaces (`--c-bg` = #f5f5f7, white canvas for graphs).
+- Clear hierarchy (title → subtitle → content, accent color for emphasis only).
+- Precise spacing (28px flex gap in content-zone, consistent padding).
 
 Modify for presentations:
 - Do not use webpage-like long vertical sections.
 - Do not use product-tile layouts that assume scrolling.
 - Do not rely on huge empty hero whitespace on every slide.
-- Do not use logos.
 - Make each slide self-contained and information-dense enough for presentation use.
 
 ## Slide Types
@@ -386,68 +897,75 @@ Modify for presentations:
 Use these slide types consistently:
 
 ### Cover Slide
-- 16:9 only.
-- No logo.
-- Large title.
-- Optional subtitle, date, author, or context.
-- Use IBM Plex Sans.
-- Keep composition clean and centered or left-aligned.
+- `class="slide slide-cover"`.
+- No `.slide-header`.
+- Large title (82px), optional subtitle (42px/weight 300), cover-tag, cover-meta.
+- Blue 6px line at the very bottom via `.cover-line`.
 
-### Section Divider
-- 16:9 only.
-- No logo.
+### Section Divider / Dark Slide
+- `class="slide slide-dark"`.
 - Chapter number and chapter title.
 - Can use more whitespace than normal slides.
-- Still follow the same typography system.
+- Same typography, but text is white; accent line uses `--c-accent-dk`.
 
 ### Standard Content Slide
-- Fixed chapter/title/subtitle placement.
-- Structured content area.
+- `.slide-header` + `.title-zone` + `.content-zone`.
 - Avoid empty lower regions.
 - Use bottom area for supporting details, takeaways, or compact evidence.
 
+### Interactive Graph Slide
+- Same header/title structure.
+- Canvas in `.graph-wrap`, legend below canvas.
+- Slider row + optional preset buttons.
+- Info line showing current state (intersection count, region name, etc.).
+
 ### Data / Chart Slide
-- Fixed title system.
-- Chart should occupy the main content zone.
+- Chart (canvas) occupies main content zone.
 - Use bottom or side annotation space for interpretation.
-- Use IBM Plex Sans for labels and KaTeX Math for formulas.
+- Use IBM Plex Sans for labels; KaTeX for formulas.
 - Avoid unnecessary decorative chart elements.
 
 ### Comparison Slide
-- Use consistent columns or cards.
+- Use `.cols` for consistent columns.
 - Keep headings aligned.
-- Use bottom row for conclusion, recommendation, or decision criteria.
+- Use bottom row or `.box` for conclusion or decision criteria.
 
-### Summary Slide
-- Use a compact, dense layout.
-- Include key takeaways, implications, and next actions.
-- Do not leave the bottom empty.
+### Summary / Outro Slide
+- Use `.slide-outro` for the final slide.
+- `class="slide slide-outro"`, no `.slide-header`.
+- Centered layout, large main text (96px/700), subdued subtitle (38px/300).
 
 ## Prohibited Elements
 
 Do not use:
-- Logos.
-- Decorative brand marks.
+- Logos or decorative brand marks.
 - Random icons used as decoration.
 - Multiple unrelated fonts.
-- Non-16:9 slide sizes.
+- Non-1920×1080 slide canvas sizes.
+- `vw`/`vh` units inside `.slide` elements.
 - Excessively sparse layouts on normal content slides.
 - Inconsistent title placement across slides.
 - Large unused bottom whitespace.
-- Decorative gradients unless they are subtle and necessary.
-- Heavy shadows, flashy effects, or ornamental frames.
+- Decorative gradients.
+- Heavy shadows on UI elements (shadows only on `<canvas>` via `.graph-wrap canvas`).
+- Hardcoded hex colors (use CSS variables).
+- Font sizes below 26px inside slides.
 
 ## Final Quality Check Before Output
 
-Before generating the final PPT content, verify:
+Before generating the final HTML, verify:
 
-1. Every slide is 16:9.
-2. No logo or logo-like element appears.
-3. IBM Plex Sans is the main font.
-4. KaTeX Math is used for equations and mathematical notation.
-5. Other fonts are avoided unless required for fallback rendering.
-6. Chapter name, title, and subtitle positions are consistent across standard slides.
-7. The bottom area of each normal content slide is meaningfully used.
-8. Slide density is balanced: not crowded, not empty.
-9. The design feels like one coherent system.
-10. The output remains in English unless the user explicitly requests another language.
+1. Every slide canvas is 1920×1080 px; viewport scaling JS is present.
+2. No logo or logo-like element appears anywhere.
+3. IBM Plex Sans KR / IBM Plex Sans is the only text font (loaded via Google Fonts CDN).
+4. KaTeX CDN links are present in `<head>` and before `</body>`.
+5. KaTeX `renderMathInElement` is called inside `DOMContentLoaded`.
+6. All graphs use the `Graph` class; `drawGraph*` functions are called inside `requestAnimationFrame`.
+7. Chapter label, title, and subtitle positions are consistent across standard slides.
+8. Every standard content slide uses `.slide-header` + `.title-zone` + `.content-zone`.
+9. The bottom area of each normal content slide is meaningfully used.
+10. Slide density is balanced: not crowded, not empty.
+11. All CSS colors use `var(--c-*)` variables; no inline hex in components.
+12. The output feels like one coherent system.
+13. The first slide has `class="slide slide-cover active"` and the last has `class="slide slide-outro"`.
+14. `TOTAL` in slide.js matches the actual number of slides.
